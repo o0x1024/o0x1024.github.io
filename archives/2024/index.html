@@ -17,15 +17,17 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/orange/pace-theme-bounce.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ihongren.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":"auto","version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ihongren.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="一个喜欢写代码的安全工程师">
+    <meta name="description" content="一个酷爱编程的安全工程师">
 <meta property="og:type" content="website">
 <meta property="og:title" content="gelen&#39;s blog">
 <meta property="og:url" content="https://ihongren.github.io/archives/2024/index.html">
 <meta property="og:site_name" content="gelen&#39;s blog">
-<meta property="og:description" content="一个喜欢写代码的安全工程师">
+<meta property="og:description" content="一个酷爱编程的安全工程师">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="gelen">
 <meta name="twitter:card" content="summary">
@@ -56,7 +58,10 @@
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
 
+  
   <main class="main">
+
+
     <div class="column">
       <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
@@ -132,7 +137,9 @@
         <li class="sidebar-nav-overview">
           站点概览
         </li>
+        
       </ul>
+
 
       <div class="sidebar-panel-container">
         <!--noindex-->
@@ -142,16 +149,28 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="gelen"
+      src="/images/avatar2.gif">
   <p class="site-author-name" itemprop="name">gelen</p>
-  <div class="site-description" itemprop="description">一个喜欢写代码的安全工程师</div>
+  <div class="site-description" itemprop="description">一个酷爱编程的安全工程师</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -159,16 +178,43 @@
       <span class="links-of-author-item">
         <a href="https://github.com/o0x1024" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;o0x1024" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
+      <span class="links-of-author-item">
+        <a href="/o0x1024@gmail" title="E-Mail → o0x1024@gmail" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
   </div>
-<!-- CloudCalendar -->
-<div class="widget-wrap" style="width: 90%;margin-left: auto;margin-right: auto; opacity: 0.97;">
-	<div class="widget" id="CloudCalendar"></div>
-</div>
+
         </div>
       </div>
     </div>
 
     
+
+
+        <div class="twopeople">
+               <div class="container" style="height:200px;">
+                   <canvas class="illo" width="400" height="400" style="max-width: 200px; max-height: 200px; touch-action: none; width: 640px; height: 300px;"></canvas>
+               </div>
+               <script src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/js/twopeople1.js"></script>
+               <script src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/js/zdog.dist.js"></script>
+               <script id="rendered-js" src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/js/twopeople.js"></script>
+               <style>
+                   .twopeople{
+                       margin: 0;
+                       align-items: center;
+                       justify-content: center;
+                       text-align: center;
+                   }
+                   canvas {
+                       display: block;
+                       margin: 0 auto;
+                       cursor: move;
+                   }
+               </style>
+             </div>
+        </div>
+
+
+
   </aside>
 
 
@@ -183,27 +229,67 @@
   <div class="post-block">
     <div class="post-content">
       <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 1 篇日志。 继续努力。</span>
+        <span class="collection-header">damn! 目前共计 3 篇日志。 继续努力。</span>
       </div>
 
       
     <div class="collection-year">
-      <span class="collection-header">2024<span class="collection-year-count">1</span></span>
+      <span class="collection-header">2024<span class="collection-year-count">3</span></span>
     </div>
 
   <article itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
       <div class="post-meta-container">
         <time itemprop="dateCreated"
-              datetime="2024-08-09T16:39:12+08:00"
-              content="2024-08-09">
-          08-09
+              datetime="2024-08-16T11:10:15+08:00"
+              content="2024-08-16">
+          08-16
         </time>
       </div>
 
       <div class="post-title">
-          <a class="post-title-link" href="/2024/08/09/hello-world/" itemprop="url">
-            <span itemprop="name">Hello World</span>
+          <a class="post-title-link" href="/2024/08/16/rust%E5%9B%BD%E5%86%85%E6%BA%90%E8%AE%BE%E7%BD%AE/" itemprop="url">
+            <span itemprop="name">rust国内源设置</span>
+          </a>
+      </div>
+
+      
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <div class="post-meta-container">
+        <time itemprop="dateCreated"
+              datetime="2024-08-10T23:03:11+08:00"
+              content="2024-08-10">
+          08-10
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2024/08/10/python-pip%E5%9B%BD%E5%86%85%E6%BA%90/" itemprop="url">
+            <span itemprop="name">python pip国内源</span>
+          </a>
+      </div>
+
+      
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <div class="post-meta-container">
+        <time itemprop="dateCreated"
+              datetime="2024-08-10T10:07:51+08:00"
+              content="2024-08-10">
+          08-10
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2024/08/10/rust%E5%85%A5%E9%97%A8%E5%AF%BC%E8%88%AA/" itemprop="url">
+            <span itemprop="name">rust入门导航</span>
           </a>
       </div>
 
@@ -224,14 +310,6 @@
   <footer class="footer">
     <div class="footer-inner">
 
-  <div class="copyright">
-    &copy; 
-    <span itemprop="copyrightYear">2024</span>
-    <span class="with-love">
-      <i class="fa fa-heart"></i>
-    </span>
-    <span class="author" itemprop="copyrightHolder">gelen</span>
-  </div>
 
     </div>
   </footer>
@@ -247,6 +325,7 @@
     <i class="fa fa-arrow-up fa-lg"></i>
     <span>0%</span>
   </div>
+  <div class="reading-progress-bar"></div>
 
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
@@ -255,15 +334,19 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.3.0/pdfobject.min.js","integrity":"sha256-JJZNsid68vnh3/zyj0lY9BN5ynxVX/12XgOa1TlaYN0="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
 
 
 
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -271,23 +354,9 @@
 
 
 
-<!-- calendar widget -->
-{% if theme.CloudCalendar.enable %}
-    <script src="{{ theme.CloudCalendar.calendarCdn }}"></script>
-    <script src="{{ theme.CloudCalendar.langCdn }}"></script>
-    <script>
-    $(function() {
-        $('#CloudCalendar').aCalendar('{{ theme.CloudCalendar.language }}',
-            $.extend(
-                '', {
-                    single:{{ theme.CloudCalendar.single }},
-                    root:'{{ theme.CloudCalendar.root }}'
-                }
-            )
-        );
-    });
-    </script>
-{% endif %}
+
+
+
 
 </body>
 </html>
