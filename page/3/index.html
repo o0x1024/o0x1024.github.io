@@ -1117,7 +1117,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-09-10 11:13:50 / 修改时间：11:44:54" itemprop="dateCreated datePublished" datetime="2024-09-10T11:13:50+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:13:50 / 修改时间：14:13:51" itemprop="dateCreated datePublished" datetime="2024-09-10T11:13:50+08:00">2024-09-10</time>
     </span>
 
   
@@ -1144,7 +1144,6 @@
 <p>拉取摬像</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># sudo docker-compose up -d</span><br></pre></td></tr></table></figure>
 
-<p>这一步执行完后，就可以访问了 【<a href="http://IP:8000】,但是新建账号的时候会报错，意思是必须要https访问才行">http://IP:8000】,但是新建账号的时候会报错，意思是必须要https访问才行</a><br><img src="/images/blog/5b0d4f7e8a9bcaba2400c4fa7d25b3d4.png"></p>
 <p>官方文档提供多种方式使用HTTPs访问，这里我们采用nginx反向代理+自签名证书的方式来进行HTTPs访问</p>
 <h3 id="0x4-安装nginx"><a href="#0x4-安装nginx" class="headerlink" title="0x4 安装nginx"></a>0x4 安装nginx</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># yum install nginx -y</span><br><span class="line"># systemctl start nginx</span><br></pre></td></tr></table></figure>
 
@@ -1167,7 +1166,7 @@
 <p>重启nginx</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># systemctl restart nginx</span><br></pre></td></tr></table></figure>
 
-<p>此时访问<a href="http://IP:443，就可以正常访问和注册了">http://IP:443，就可以正常访问和注册了</a><br><img src="/images/blog/f132ea907ff86631acbf51290f16b209.png"><br><img src="/images/blog/802178fa7e77d8e0f35791876d211ceb.png"></p>
+<p>此时访问443，就可以正常访问和注册了<br><img src="/images/blog/f132ea907ff86631acbf51290f16b209.png" alt="1"><br><img src="/images/blog/802178fa7e77d8e0f35791876d211ceb.png" alt="1"></p>
 <h3 id="0x6-端口映射"><a href="#0x6-端口映射" class="headerlink" title="0x6 端口映射"></a>0x6 端口映射</h3><p>使用端口映射工具（FRP等）把本地端口映射到公网，即可实现公网的访问了</p>
 <h3 id="0x7-certbot申请证书"><a href="#0x7-certbot申请证书" class="headerlink" title="0x7 certbot申请证书"></a>0x7 certbot申请证书</h3><p>添加在域名管理添加一条A记录，指定安装了certbot应用的服务器<br><img src="/images/blog/7432a8645b3ad79ee04fa934b4020c53.png"></p>
 <p>然后在指向的服务器执行生成证书</p>
