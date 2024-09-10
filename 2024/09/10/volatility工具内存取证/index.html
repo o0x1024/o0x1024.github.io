@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/orange/pace-theme-bounce.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ihongren.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="获取内存镜像的摘要信息1volatility -f mem.raw imageinfo 判断系统版本应该是 Win7SP1x64 查看进程信息pslist 可以直接列出运行的进程，如果进程已经结束，会在 Exit 列显示日期和时间，表明进程已经结束 1volatility -f mem.raw --profile&#x3D;Win7SP1x64 pslist  查看隐藏进程12volatility -f m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="volatility工具内存取证">
+<meta property="og:url" content="https://ihongren.github.io/2024/09/10/volatility%E5%B7%A5%E5%85%B7%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/index.html">
+<meta property="og:site_name" content="gelen&#39;s blog">
+<meta property="og:description" content="获取内存镜像的摘要信息1volatility -f mem.raw imageinfo 判断系统版本应该是 Win7SP1x64 查看进程信息pslist 可以直接列出运行的进程，如果进程已经结束，会在 Exit 列显示日期和时间，表明进程已经结束 1volatility -f mem.raw --profile&#x3D;Win7SP1x64 pslist  查看隐藏进程12volatility -f m">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-09-10T01:53:32.000Z">
+<meta property="article:modified_time" content="2024-09-10T01:53:42.200Z">
+<meta property="article:author" content="gelen">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ihongren.github.io/2024/09/10/volatility%E5%B7%A5%E5%85%B7%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ihongren.github.io/2024/09/10/volatility%E5%B7%A5%E5%85%B7%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/","path":"2024/09/10/volatility工具内存取证/","title":"volatility工具内存取证"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>volatility工具内存取证 | gelen's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  
+  <main class="main">
+
+
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">gelen's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+        
+      </ul>
+
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%86%85%E5%AD%98%E9%95%9C%E5%83%8F%E7%9A%84%E6%91%98%E8%A6%81%E4%BF%A1%E6%81%AF"><span class="nav-number">1.</span> <span class="nav-text">获取内存镜像的摘要信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E4%BF%A1%E6%81%AF"><span class="nav-number">2.</span> <span class="nav-text">查看进程信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">查看隐藏进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%97%E4%B8%BE%E7%BC%93%E5%AD%98%E5%9C%A8%E5%86%85%E5%AD%98%E7%9A%84%E6%B3%A8%E5%86%8C%E8%A1%A8"><span class="nav-number">4.</span> <span class="nav-text">列举缓存在内存的注册表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E4%B8%BB%E6%9C%BA%E5%90%8D"><span class="nav-number">5.</span> <span class="nav-text">提取主机名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E8%87%AA%E5%90%AF%E5%8A%A8%E9%A1%B9"><span class="nav-number">6.</span> <span class="nav-text">提取自启动项</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="gelen"
+      src="/images/avatar2.gif">
+  <p class="site-author-name" itemprop="name">gelen</p>
+  <div class="site-description" itemprop="description">一个酷爱编程的安全工程师</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">75</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/o0x1024" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;o0x1024" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/o0x1024@gmail" title="E-Mail → o0x1024@gmail" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+
+
+        <div class="twopeople">
+               <div class="container" style="height:200px;">
+                   <canvas class="illo" width="400" height="400" style="max-width: 200px; max-height: 200px; touch-action: none; width: 640px; height: 300px;"></canvas>
+               </div>
+               <script src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/js/twopeople1.js"></script>
+               <script src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/js/zdog.dist.js"></script>
+               <script id="rendered-js" src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/js/twopeople.js"></script>
+               <style>
+                   .twopeople{
+                       margin: 0;
+                       align-items: center;
+                       justify-content: center;
+                       text-align: center;
+                   }
+                   canvas {
+                       display: block;
+                       margin: 0 auto;
+                       cursor: move;
+                   }
+               </style>
+             </div>
+        </div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ihongren.github.io/2024/09/10/volatility%E5%B7%A5%E5%85%B7%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.gif">
+      <meta itemprop="name" content="gelen">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="gelen's blog">
+      <meta itemprop="description" content="一个酷爱编程的安全工程师">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="volatility工具内存取证 | gelen's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          volatility工具内存取证
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-09-10 09:53:32 / 修改时间：09:53:42" itemprop="dateCreated datePublished" datetime="2024-09-10T09:53:32+08:00">2024-09-10</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="获取内存镜像的摘要信息"><a href="#获取内存镜像的摘要信息" class="headerlink" title="获取内存镜像的摘要信息"></a>获取内存镜像的摘要信息</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f mem.raw imageinfo</span><br></pre></td></tr></table></figure>
+<p>判断系统版本应该是 Win7SP1x64</p>
+<h3 id="查看进程信息"><a href="#查看进程信息" class="headerlink" title="查看进程信息"></a>查看进程信息</h3><p>pslist 可以直接列出运行的进程，如果进程已经结束，会在 Exit 列显示日期和时间，表明进程已经结束</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f mem.raw --profile=Win7SP1x64 pslist</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看隐藏进程"><a href="#查看隐藏进程" class="headerlink" title="查看隐藏进程"></a>查看隐藏进程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">volatility -f mem.raw --profile=Win7SP1x64 pstree</span><br><span class="line">volatility -f mem.raw --profile=Win7SP1x64 psxview</span><br></pre></td></tr></table></figure>
+
+<h3 id="列举缓存在内存的注册表"><a href="#列举缓存在内存的注册表" class="headerlink" title="列举缓存在内存的注册表"></a>列举缓存在内存的注册表</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f mem.raw --profile=Win7SP1x64 hivelist</span><br></pre></td></tr></table></figure>
+
+<h3 id="提取主机名"><a href="#提取主机名" class="headerlink" title="提取主机名"></a>提取主机名</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f mem.raw --profile=Win7SP1x64 printkey -K &quot;ControlSet001\Control\ComputerName\ComputerName&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="提取自启动项"><a href="#提取自启动项" class="headerlink" title="提取自启动项"></a>提取自启动项</h3><p>提取内存中保留的 cmd 命令使用情况</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=WinXPSP2x86 cmdscan</span><br></pre></td></tr></table></figure>
+<p>获取到当时的网络连接情况</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=WinXPSP2x86 netscan</span><br><span class="line">````</span><br><span class="line">### 提取 ip 地址和主机名</span><br></pre></td></tr></table></figure>
+<p>volatility -f name –profile&#x3D;WinXPSP2x86 netscan | grep ESTABLISHED</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">userassist 键值包含系统或桌面执行文件的信息，如名称、路径、执行次数、最后一次执行时间等</span><br></pre></td></tr></table></figure>
+<p>volatility -f name –profile&#x3D;WinXPSP2x86 userassist</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">### 获取 SAM 表中的用户 ：</span><br></pre></td></tr></table></figure>
+<p>volatility -f mem.raw –profile&#x3D;Win7SP1x64 printkey -K “SAM\Domains\Account\Users\Names”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">显示每个进程的加载 dll 列表</span><br></pre></td></tr></table></figure>
+<p>Volatility -f name -profile &#x3D; Win7SP0x86 dlllist&gt; dlllist.txt</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">### 扫描内存中的文件</span><br></pre></td></tr></table></figure>
+<p>volatility -f mem.raw –profile&#x3D;Win7SP1x64 filescan</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">filescan 也可以结合 grep 命令来进行筛选，比如</span><br></pre></td></tr></table></figure>
+<p>volatility -f mem.raw –profile&#x3D;Win7SP1x64 filescan | grep “doc|docx”<br>volatility -f mem.raw –profile&#x3D;Win7SP1x64 filescan | grep “flag”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 提取 flag 值</span><br></pre></td></tr></table></figure>
+<p>volatility -f mem.raw –profile&#x3D;Win7SP1x64 dumpfiles -Q 0x07f1b6c10 –dump-dir&#x3D;.&#x2F;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 提取内存中保留的 cmd 命令使用情况</span><br></pre></td></tr></table></figure>
+<p>volatility -f mem.raw –profile&#x3D;Win7SP1x64 cmdline</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 提取出内存中记录的 当时正在运行的程序</span><br></pre></td></tr></table></figure>
+<p>volatility -f mem.vmem –profile&#x3D;Win7SP1x64 userassist</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 提取网络连接情况</span><br></pre></td></tr></table></figure>
+<p>volatility -f mem.raw –profile&#x3D;Win7SP1x64 netscan</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 提取 IE 浏览器历史</span><br></pre></td></tr></table></figure>
+<p>volatility -f mem.raw –profile&#x3D;Win7SP1x64 iehistory</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">### 提取系统密码（hashdump）</span><br><span class="line">直接 hashdump</span><br></pre></td></tr></table></figure>
+<p>volatility -f mem.raw –profile&#x3D;Win7SP1x64 hashdump</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">注册表 system 的 virtual 地址</span><br><span class="line">SAM 的 virtual 地址</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">dump 出来密码</span><br></pre></td></tr></table></figure>
+<p>volatility -f mem.vmem –profile&#x3D;Win7SP1x64 hashdump -y （注册表 system 的 virtual 地址 ）-s （SAM 的 virtual 地址）<br>volatility -f mem.vmen –profile&#x3D;Win7SP1x64 hashdump -y 0xfffff8a000024010 -s 0xfffff8a000867010</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 提取迁移后的进程编号</span><br></pre></td></tr></table></figure>
+<p>volatility -f mem.raw –profile&#x3D;Win7SP1x64 malfind</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">### 提取开机自启项的 Virtual 地址</span><br></pre></td></tr></table></figure>
+<p>volatility -f mem.raw –profile&#x3D;Win7SP1x64 printkey -K “SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce”<br>volatility -f mem.raw –profile&#x3D;Win7SP1x64 printkey -K “SOFTWARE\Microsoft\Windows\CurrentVersion\Run”</p>
+<pre><code>
+### 参考
+https://blog.csdn.net/qq_60115503/article/details/124818819
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/09/10/CVE-2019-19781-citrix-NetScaler-%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86-rce%E6%BC%8F%E6%B4%9E/" rel="prev" title="CVE-2019-19781 citrix NetScaler 路径遍历 rce漏洞">
+                  <i class="fa fa-angle-left"></i> CVE-2019-19781 citrix NetScaler 路径遍历 rce漏洞
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/09/10/CVE-2022-26134%E6%BC%8F%E6%B4%9E-Confluence-OGNL-%E6%B3%A8%E5%85%A5rce%E6%BC%8F%E6%B4%9E/" rel="next" title="CVE -2022-26134漏洞 (Confluence OGNL 注入rce漏洞)">
+                  CVE -2022-26134漏洞 (Confluence OGNL 注入rce漏洞) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.3.0/pdfobject.min.js","integrity":"sha256-JJZNsid68vnh3/zyj0lY9BN5ynxVX/12XgOa1TlaYN0="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+</body>
+</html>

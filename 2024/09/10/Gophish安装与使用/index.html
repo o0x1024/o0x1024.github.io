@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/orange/pace-theme-bounce.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ihongren.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="邮件服务器搭建请看另一篇:邮件服务器搭建  0x1 下载12https:&#x2F;&#x2F;github.com&#x2F;gophish&#x2F;gophishhttps:&#x2F;&#x2F;github.com&#x2F;gophish&#x2F;gophish&#x2F;releases&#x2F;download&#x2F;v0.11.0&#x2F;gophish-v0.11.0-linux-64bit.zip   0x2 安装12[root@localhost ~]# wget https:&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gophish安装与使用">
+<meta property="og:url" content="https://ihongren.github.io/2024/09/10/Gophish%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="gelen&#39;s blog">
+<meta property="og:description" content="邮件服务器搭建请看另一篇:邮件服务器搭建  0x1 下载12https:&#x2F;&#x2F;github.com&#x2F;gophish&#x2F;gophishhttps:&#x2F;&#x2F;github.com&#x2F;gophish&#x2F;gophish&#x2F;releases&#x2F;download&#x2F;v0.11.0&#x2F;gophish-v0.11.0-linux-64bit.zip   0x2 安装12[root@localhost ~]# wget https:&#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ihongren.github.io/images/blog/d39cccba83cdbe01f572336751cebbd8.png">
+<meta property="og:image" content="https://ihongren.github.io/images/blog/4bee75798455f7e6727590b18fba1392.png">
+<meta property="og:image" content="https://ihongren.github.io/images/blog/b51c59e575cbfd6803ae70a74332b78b.png">
+<meta property="og:image" content="https://ihongren.github.io/images/blog/226e6057092e1590a2b659308a46d14a.png">
+<meta property="og:image" content="https://ihongren.github.io/images/blog/45f566b8c7b44bdc9bf2f352ebc5a69f.png">
+<meta property="og:image" content="https://ihongren.github.io/images/blog/e8f3b4d3c493528f4177f02ca52653ff.png">
+<meta property="og:image" content="https://ihongren.github.io/images/blog/178ba2b42eade914f80394ec4304c4cb.png">
+<meta property="og:image" content="https://ihongren.github.io/images/blog/d52cba7a769b0c1dfa0a6bcc7c712fe3.png">
+<meta property="og:image" content="https://ihongren.github.io/images/blog/aca2fe8b6204de037c0540e82a354cb6.png">
+<meta property="article:published_time" content="2024-09-10T03:26:55.000Z">
+<meta property="article:modified_time" content="2024-09-10T03:43:52.012Z">
+<meta property="article:author" content="gelen">
+<meta property="article:tag" content="社会工程学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ihongren.github.io/images/blog/d39cccba83cdbe01f572336751cebbd8.png">
+
+
+<link rel="canonical" href="https://ihongren.github.io/2024/09/10/Gophish%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ihongren.github.io/2024/09/10/Gophish%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/","path":"2024/09/10/Gophish安装与使用/","title":"Gophish安装与使用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Gophish安装与使用 | gelen's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  
+  <main class="main">
+
+
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">gelen's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+        
+      </ul>
+
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x1-%E4%B8%8B%E8%BD%BD"><span class="nav-number">1.</span> <span class="nav-text">0x1 下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x2-%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">0x2 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C"><span class="nav-number">2.2.</span> <span class="nav-text">运行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x3-%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.</span> <span class="nav-text">0x3 功能介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E7%95%8C%E9%9D%A2"><span class="nav-number">3.1.</span> <span class="nav-text">功能界面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8F%9C%E5%8D%95%E8%AF%B4%E6%98%8E"><span class="nav-number">3.2.</span> <span class="nav-text">菜单说明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x4-%E5%AE%9E%E6%88%98"><span class="nav-number">4.</span> <span class="nav-text">0x4 实战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E4%BA%BA%E4%BF%A1%E6%81%AF%E9%85%8D%E7%BD%AE"><span class="nav-number">4.1.</span> <span class="nav-text">发送人信息配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%82%AE%E4%BB%B6%E6%A8%A1%E6%9D%BF%E9%85%8D%E7%BD%AE%E3%80%90Sending-Profiles%E3%80%91"><span class="nav-number">4.2.</span> <span class="nav-text">邮件模板配置【Sending Profiles】</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%B6%E4%BB%B6%E4%BA%BA%E9%85%8D%E7%BD%AE"><span class="nav-number">4.3.</span> <span class="nav-text">收件人配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%92%93%E9%B1%BC%E9%A1%B5%E9%9D%A2%E9%85%8D%E7%BD%AE"><span class="nav-number">4.4.</span> <span class="nav-text">钓鱼页面配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%92%93%E9%B1%BC%E5%B7%A5%E4%BD%9C%E9%9D%A2%E6%9D%BF%E9%85%8D%E7%BD%AE-%E5%8F%91%E9%80%81%E9%92%93%E9%B1%BC%E9%82%AE%E4%BB%B6"><span class="nav-number">4.5.</span> <span class="nav-text">钓鱼工作面板配置&amp;发送钓鱼邮件</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="gelen"
+      src="/images/avatar2.gif">
+  <p class="site-author-name" itemprop="name">gelen</p>
+  <div class="site-description" itemprop="description">一个酷爱编程的安全工程师</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">75</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/o0x1024" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;o0x1024" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/o0x1024@gmail" title="E-Mail → o0x1024@gmail" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+
+
+        <div class="twopeople">
+               <div class="container" style="height:200px;">
+                   <canvas class="illo" width="400" height="400" style="max-width: 200px; max-height: 200px; touch-action: none; width: 640px; height: 300px;"></canvas>
+               </div>
+               <script src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/js/twopeople1.js"></script>
+               <script src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/js/zdog.dist.js"></script>
+               <script id="rendered-js" src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/js/twopeople.js"></script>
+               <style>
+                   .twopeople{
+                       margin: 0;
+                       align-items: center;
+                       justify-content: center;
+                       text-align: center;
+                   }
+                   canvas {
+                       display: block;
+                       margin: 0 auto;
+                       cursor: move;
+                   }
+               </style>
+             </div>
+        </div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ihongren.github.io/2024/09/10/Gophish%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.gif">
+      <meta itemprop="name" content="gelen">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="gelen's blog">
+      <meta itemprop="description" content="一个酷爱编程的安全工程师">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Gophish安装与使用 | gelen's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Gophish安装与使用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-09-10 11:26:55 / 修改时间：11:43:52" itemprop="dateCreated datePublished" datetime="2024-09-10T11:26:55+08:00">2024-09-10</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>邮件服务器搭建请看另一篇:<a target="_blank" rel="noopener" href="http://42.193.253.66:3000/shareview?key=7ac61948c55d9dd575953a0b8f07849b">邮件服务器搭建</a></p>
+</blockquote>
+<h3 id="0x1-下载"><a href="#0x1-下载" class="headerlink" title="0x1 下载"></a>0x1 下载</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/gophish/gophish</span><br><span class="line">https://github.com/gophish/gophish/releases/download/v0.11.0/gophish-v0.11.0-linux-64bit.zip</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="0x2-安装"><a href="#0x2-安装" class="headerlink" title="0x2 安装"></a>0x2 安装</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# wget https://github.com/gophish/gophish/releases/download/v0.11.0/gophish-v0.11.0-linux-64bit.zip</span><br><span class="line">[root@localhost ~]# unzip gophish-v0.11.0-linux-64bit.zip</span><br></pre></td></tr></table></figure>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>监听设置为0.0.0.0意思是监听本机中所有IP的端口，127.0.0.1只能本机访问</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        &quot;admin_server&quot;: &#123;</span><br><span class="line">                &quot;listen_url&quot;: &quot;0.0.0.0:443&quot;,</span><br><span class="line">                &quot;use_tls&quot;: true,</span><br><span class="line">                &quot;cert_path&quot;: &quot;gophish_admin.crt&quot;,</span><br><span class="line">                &quot;key_path&quot;: &quot;gophish_admin.key&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;phish_server&quot;: &#123;</span><br><span class="line">                &quot;listen_url&quot;: &quot;0.0.0.0:80&quot;,</span><br><span class="line">                &quot;use_tls&quot;: false,</span><br><span class="line">                &quot;cert_path&quot;: &quot;example.crt&quot;,</span><br><span class="line">                &quot;key_path&quot;: &quot;example.key&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;db_name&quot;: &quot;sqlite3&quot;,</span><br><span class="line">        &quot;db_path&quot;: &quot;gophish.db&quot;,</span><br><span class="line">        &quot;migrations_prefix&quot;: &quot;db/db_&quot;,</span><br><span class="line">        &quot;contact_address&quot;: &quot;&quot;,</span><br><span class="line">        &quot;logging&quot;: &#123;</span><br><span class="line">                &quot;filename&quot;: &quot;&quot;,</span><br><span class="line">                &quot;level&quot;: &quot;&quot;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p> listen_url为后续放到钓鱼邮件里的链接</p>
+</blockquote>
+<p>更新gophish权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhsot gophish]# chmod +x gophish</span><br></pre></td></tr></table></figure>
+
+<h4 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./gophish &amp;</span><br></pre></td></tr></table></figure>
+
+<h3 id="0x3-功能介绍"><a href="#0x3-功能介绍" class="headerlink" title="0x3 功能介绍"></a>0x3 功能介绍</h3><h4 id="功能界面"><a href="#功能界面" class="headerlink" title="功能界面"></a>功能界面</h4><p><img src="/images/blog/d39cccba83cdbe01f572336751cebbd8.png"></p>
+<h4 id="菜单说明"><a href="#菜单说明" class="headerlink" title="菜单说明"></a>菜单说明</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Sending Profiles        发件策略</span><br><span class="line">Campaigns               工作面板</span><br><span class="line">Users &amp; Groups          用户配置--配置收件人</span><br><span class="line">Email Templates         邮件模板--邮件内容设置</span><br><span class="line">Landing Pages           钓鱼页面</span><br><span class="line">Sending Profiles        邮箱发件配置</span><br><span class="line">Account Settings        账户设置</span><br><span class="line">User ManagementAdmin    用户设置--配置后台可登录的用户</span><br><span class="line">WebhooksAdmin           个人暂时不涉及</span><br><span class="line">User Guide</span><br></pre></td></tr></table></figure>
+
+<h3 id="0x4-实战"><a href="#0x4-实战" class="headerlink" title="0x4 实战"></a>0x4 实战</h3><h4 id="发送人信息配置"><a href="#发送人信息配置" class="headerlink" title="发送人信息配置"></a>发送人信息配置</h4><p><img src="/images/blog/4bee75798455f7e6727590b18fba1392.png"></p>
+<blockquote>
+<p>1.因为我的邮件服务器和gophish是放在一台服务器，所以Host填的localhost:25<br>2.Email Headers 可以自定义，默认的话会带有gophish的关键字,可添加【X-Mailer】更改默认值</p>
+</blockquote>
+<h4 id="邮件模板配置【Sending-Profiles】"><a href="#邮件模板配置【Sending-Profiles】" class="headerlink" title="邮件模板配置【Sending Profiles】"></a>邮件模板配置【Sending Profiles】</h4><blockquote>
+<p>邮件模板请参考另一篇</p>
+</blockquote>
+<blockquote>
+<p>注意其中的  .URL  参数，这是一个占位符，邮件实际发出后，会插入钓鱼的链接</p>
+</blockquote>
+<h4 id="收件人配置"><a href="#收件人配置" class="headerlink" title="收件人配置"></a>收件人配置</h4><p>可批量添加【<strong>Bulk Import Users</strong>】，<strong>first name</strong> 和 <strong>Last name</strong>可不填，不影响，在<strong>Email</strong>填入收件人的邮箱即可，好了之后点击【Add】<br><img src="/images/blog/b51c59e575cbfd6803ae70a74332b78b.png"></p>
+<h4 id="钓鱼页面配置"><a href="#钓鱼页面配置" class="headerlink" title="钓鱼页面配置"></a>钓鱼页面配置</h4><p><img src="/images/blog/226e6057092e1590a2b659308a46d14a.png"></p>
+<p>可直接克隆站点【Import Site】，如果需要抓取账号密码的话，把【Capture Submitted Data 】勾选。<br>在用户点击提交按钮后想跳转的话在【Redirect to】填入要跳转的URL</p>
+<blockquote>
+<p>这里需要注意的是，如果想要跳转必须是标准的form表单格式,表单（POST方式）— Input标签（具有name属性）Input标签（submit类型）,如果不是则无法捕获数据，且重定向也会有问题。样式如下</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;form method=&quot;post&quot; ···&gt;</span><br><span class="line">  &lt;input name=&quot;username&quot; ··· /&gt; </span><br><span class="line">  &lt;input name=&quot;password&quot; ··· /&gt; </span><br><span class="line">  &lt;input type=&quot;submit&quot; ··· /&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="钓鱼工作面板配置-发送钓鱼邮件"><a href="#钓鱼工作面板配置-发送钓鱼邮件" class="headerlink" title="钓鱼工作面板配置&amp;发送钓鱼邮件"></a>钓鱼工作面板配置&amp;发送钓鱼邮件</h4><p><img src="/images/blog/45f566b8c7b44bdc9bf2f352ebc5a69f.png"><br>释意如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Name:			项目名称</span><br><span class="line">Email Template:		使用哪个邮件模板</span><br><span class="line">Landing Page:		使用哪个钓鱼页面</span><br><span class="line">URL: 			钓鱼页面URL---就是我们上面配置的【listen_url】配置是0.0.0.0:80，这里填入公网的IP和端口【http://公网IP:80】</span><br><span class="line">Launch Date		什么时候发送</span><br><span class="line">Sending Profile:	谁来发送</span><br><span class="line">Groups:			发送给谁</span><br></pre></td></tr></table></figure>
+<p>收到的邮件信息如下：<br><img src="/images/blog/e8f3b4d3c493528f4177f02ca52653ff.png"></p>
+<p>点击如下图标，可查看此工程详细信息<br><img src="/images/blog/178ba2b42eade914f80394ec4304c4cb.png"></p>
+<p><img src="/images/blog/d52cba7a769b0c1dfa0a6bcc7c712fe3.png"></p>
+<p>展开详细信息页面可以看到捕获到的用户填写的信息<br><img src="/images/blog/aca2fe8b6204de037c0540e82a354cb6.png"></p>
+<p>0x5 其它注意事项</p>
+<ul>
+<li>【捕获不到提交的数据】在满足第2点的结构的情况下，还需要求&lt;form method&#x3D;”post” ···&gt;在浏览器解析渲染后（即预览情况下）不能包含action属性，或者action属性的值为空。</li>
+</ul>
+<p>否则将会把表单数据提交给action指定的页面，而导致无法被捕获到 。</p>
+<ul>
+<li><p>【捕获数据不齐全】对于需要被捕获的表单数据，除了input标签需要被包含在中，还需满足该存在name属性。例如&lt;input name&#x3D;”username”&gt;,否则会因为没有字段名而导致value被忽略 。</p>
+</li>
+<li><p>【密码被加密】针对https页面的import，通常密码会进行加密处理，这时需要通过审计导入的前端代码，找到加密的JavaScript函数（多数情况存在于单独的js文件中，通过src引入），将其在gophish的HTML编辑框中删除，阻止表单数据被加密 。<br>以上5点是在实践中总结出来的宝贵经验，或许还有其他许多坑未填，但所有的坑通常都围绕在&lt;form&gt;&lt;input &#x2F;&gt;</form>结构中，所以如果遇到新坑，先将该结构排查一遍，还是不行，再另辟蹊径。</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%A4%BE%E4%BC%9A%E5%B7%A5%E7%A8%8B%E5%AD%A6/" rel="tag"><i class="fa fa-tag"></i> 社会工程学</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/09/10/golang%E5%8F%8D%E5%BC%B9shell%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B/" rel="prev" title="golang反弹shell代码示例">
+                  <i class="fa fa-angle-left"></i> golang反弹shell代码示例
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/09/10/%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA/" rel="next" title="邮件服务器搭建">
+                  邮件服务器搭建 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.3.0/pdfobject.min.js","integrity":"sha256-JJZNsid68vnh3/zyj0lY9BN5ynxVX/12XgOa1TlaYN0="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+</body>
+</html>

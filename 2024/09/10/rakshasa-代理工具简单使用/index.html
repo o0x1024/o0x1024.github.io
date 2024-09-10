@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/orange/pace-theme-bounce.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ihongren.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":true,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="0x0 测试环境服务器 12操作系统：centos 7IP：42.13.23.62 客户端 12操作系统: centos 7IP： 10.20.20.88  0x1 反向代理ssh首先自己下载源码编译一份12$ https:&#x2F;&#x2F;github.com&#x2F;Mob2003&#x2F;rakshasa$ cd rakshasa  设置环境1.安装golang环境 123yum install goalng或者手动下载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rakshasa 代理工具简单使用">
+<meta property="og:url" content="https://ihongren.github.io/2024/09/10/rakshasa-%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="gelen&#39;s blog">
+<meta property="og:description" content="0x0 测试环境服务器 12操作系统：centos 7IP：42.13.23.62 客户端 12操作系统: centos 7IP： 10.20.20.88  0x1 反向代理ssh首先自己下载源码编译一份12$ https:&#x2F;&#x2F;github.com&#x2F;Mob2003&#x2F;rakshasa$ cd rakshasa  设置环境1.安装golang环境 123yum install goalng或者手动下载">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-09-10T03:14:25.000Z">
+<meta property="article:modified_time" content="2024-09-10T03:47:57.707Z">
+<meta property="article:author" content="gelen">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ihongren.github.io/2024/09/10/rakshasa-%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ihongren.github.io/2024/09/10/rakshasa-%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/","path":"2024/09/10/rakshasa-代理工具简单使用/","title":"rakshasa 代理工具简单使用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>rakshasa 代理工具简单使用 | gelen's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  
+  <main class="main">
+
+
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">gelen's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+        
+      </ul>
+
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x0-%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">0x0 测试环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x1-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86ssh"><span class="nav-number">2.</span> <span class="nav-text">0x1 反向代理ssh</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E8%87%AA%E5%B7%B1%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E4%B8%80%E4%BB%BD"><span class="nav-number">2.1.</span> <span class="nav-text">首先自己下载源码编译一份</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83"><span class="nav-number">3.</span> <span class="nav-text">设置环境</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81"><span class="nav-number">3.1.</span> <span class="nav-text">验证</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="gelen"
+      src="/images/avatar2.gif">
+  <p class="site-author-name" itemprop="name">gelen</p>
+  <div class="site-description" itemprop="description">一个酷爱编程的安全工程师</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">75</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/o0x1024" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;o0x1024" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/o0x1024@gmail" title="E-Mail → o0x1024@gmail" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+
+
+        <div class="twopeople">
+               <div class="container" style="height:200px;">
+                   <canvas class="illo" width="400" height="400" style="max-width: 200px; max-height: 200px; touch-action: none; width: 640px; height: 300px;"></canvas>
+               </div>
+               <script src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/js/twopeople1.js"></script>
+               <script src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/js/zdog.dist.js"></script>
+               <script id="rendered-js" src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/js/twopeople.js"></script>
+               <style>
+                   .twopeople{
+                       margin: 0;
+                       align-items: center;
+                       justify-content: center;
+                       text-align: center;
+                   }
+                   canvas {
+                       display: block;
+                       margin: 0 auto;
+                       cursor: move;
+                   }
+               </style>
+             </div>
+        </div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ihongren.github.io/2024/09/10/rakshasa-%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.gif">
+      <meta itemprop="name" content="gelen">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="gelen's blog">
+      <meta itemprop="description" content="一个酷爱编程的安全工程师">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="rakshasa 代理工具简单使用 | gelen's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          rakshasa 代理工具简单使用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-09-10 11:14:25 / 修改时间：11:47:57" itemprop="dateCreated datePublished" datetime="2024-09-10T11:14:25+08:00">2024-09-10</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="0x0-测试环境"><a href="#0x0-测试环境" class="headerlink" title="0x0 测试环境"></a>0x0 测试环境</h3><p>服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">操作系统：centos 7</span><br><span class="line">IP：42.13.23.62</span><br></pre></td></tr></table></figure>
+<p>客户端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">操作系统: centos 7</span><br><span class="line">IP： 10.20.20.88</span><br></pre></td></tr></table></figure>
+
+<h3 id="0x1-反向代理ssh"><a href="#0x1-反向代理ssh" class="headerlink" title="0x1 反向代理ssh"></a>0x1 反向代理ssh</h3><h4 id="首先自己下载源码编译一份"><a href="#首先自己下载源码编译一份" class="headerlink" title="首先自己下载源码编译一份"></a>首先自己下载源码编译一份</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ https://github.com/Mob2003/rakshasa</span><br><span class="line">$ cd rakshasa</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置环境"><a href="#设置环境" class="headerlink" title="设置环境"></a>设置环境</h3><p>1.安装golang环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install goalng</span><br><span class="line">或者</span><br><span class="line">手动下载安装</span><br></pre></td></tr></table></figure>
+<p>2.设置国内的代理 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go env -w GOPROXY=https://goproxy.cn,direct</span><br></pre></td></tr></table></figure>
+
+<p>3.编译<br>为什么需要重新编译呢，因为官方的二进制包内置了默认的证书，该证书已经公开且泄露了，所以自己重新生成证书再编译，确保信息不会泄露</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">重新生成一份证书，默认证书已经泄露</span><br><span class="line">go run build.go -gencert</span><br><span class="line"></span><br><span class="line">生成可执行文件</span><br><span class="line">go run build.go -fullnode</span><br><span class="line"></span><br><span class="line">生成所有端的可执行文件，看个人需求了</span><br><span class="line">go run build -all</span><br></pre></td></tr></table></figure>
+<p>如果使用-all参数编译好后，会在当前bin目录生成所有端的可执行文件 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@10.20.20.88 bin]# ls</span><br><span class="line">rakshasa_fullnode_amd64_darwin       rakshasa_fullnode_amd64_lite_linux    rakshasa_fullnode_lite_amd64_darwin   rakshasa_node_amd64_darwin   rakshasa_node_lite_amd64_darwin</span><br><span class="line">rakshasa_fullnode_amd64_linux        rakshasa_fullnode_amd64_lite_win.exe  rakshasa_fullnode_lite_amd64_linux    rakshasa_node_amd64_linux    rakshasa_node_lite_amd64_linux</span><br><span class="line">rakshasa_fullnode_amd64_lite_darwin  rakshasa_fullnode_amd64_win.exe       rakshasa_fullnode_lite_amd64_win.exe  rakshasa_node_amd64_win.exe  rakshasa_node_lite_amd64_win.exe</span><br></pre></td></tr></table></figure>
+
+<p>根据操作系统，把文件拷贝到对应的服务端和客户端</p>
+<p>在服务端执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@42.13.23.62 ~]# ./rakshasa_fullnode_amd64_linux -p 7549 -nocli</span><br></pre></td></tr></table></figure>
+
+<p>在客户端执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@10.20.20.88 bin]#./rakshasa_fullnode_amd64_linux -bind 127.0.0.1:22,0.0.0.0:7548 -d 42.13.23.62:7549  --nocli</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>解释一下，这两条命令就是把 本机【10.20.20.88】的【22】端口映射到【42.13.23.62】的【7548】端口，7549只是客户端和服务端通讯的端口</p>
+</blockquote>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>我们在我们自己的机器上打开一个powershell（带有ssh命令的）<br>连接我们的【42.13.23.62】的【7548】端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\test\Desktop&gt; ssh root@42.13.23.62 -p 7548</span><br><span class="line">The authenticity of host &#x27;[42.13.23.62]:7548 ([42.13.23.62]:7548)&#x27; can&#x27;t be established.</span><br><span class="line">ECDSA key fingerprint is SHA256:8R2q3T2OpJoAFPB0rFZWYySoBzQLzjubaf63UO+Dwc8.</span><br><span class="line">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span><br><span class="line">Warning: Permanently added &#x27;[42.13.23.62]:7548&#x27; (ECDSA) to the list of known hosts.</span><br><span class="line">Authorized only. All activity will be monitored and reported</span><br><span class="line">root@42.13.23.62&#x27;s password:</span><br><span class="line">Last login: Sun Apr 23 09:16:00 2023 from localhost</span><br><span class="line">[root@mail ~]$ pwd</span><br></pre></td></tr></table></figure>
+
+
+<p>连接成功</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/09/10/bitwarden-frp-%E8%87%AA%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="prev" title="bitwarden + frp 自建服务器">
+                  <i class="fa fa-angle-left"></i> bitwarden + frp 自建服务器
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/09/10/nginx%E5%B8%B8%E8%A7%84%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE/" rel="next" title="nginx常规配置和代理配置">
+                  nginx常规配置和代理配置 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.3.0/pdfobject.min.js","integrity":"sha256-JJZNsid68vnh3/zyj0lY9BN5ynxVX/12XgOa1TlaYN0="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+</body>
+</html>
