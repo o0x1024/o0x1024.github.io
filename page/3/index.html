@@ -258,9 +258,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:19:17 / 修改时间：11:19:23" itemprop="dateCreated datePublished" datetime="2024-09-10T11:19:17+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:19:17" itemprop="dateCreated datePublished" datetime="2024-09-10T11:19:17+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:34" itemprop="dateModified" datetime="2024-10-10T18:17:34+08:00">2024-10-10</time>
     </span>
 
   
@@ -273,148 +279,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="删除所有配置"><a href="#删除所有配置" class="headerlink" title="删除所有配置"></a>删除所有配置</h3><p>iptables -F</p>
-<p>注：如果是远程连接，一定一定不要使用这个命令，所有规则删除后，你将无法连接到你的服务器</p>
-<h3 id="更改默认策略："><a href="#更改默认策略：" class="headerlink" title="更改默认策略："></a>更改默认策略：</h3><p>iptables -P INPUT DROP<br>iptables -P OUTPUT DROP<br>iptables -P FORWARD DROP</p>
-<h3 id="添加指定IP可以访问本机所有端口"><a href="#添加指定IP可以访问本机所有端口" class="headerlink" title="添加指定IP可以访问本机所有端口"></a>添加指定IP可以访问本机所有端口</h3><p>iptables -A INPUT -s xx.xx.xx.xx(IP) -p all -j ACCEPT</p>
-<p>注：-A (Append)代表追回加</p>
-<h3 id="添加指定IP可以访问本机的某端口"><a href="#添加指定IP可以访问本机的某端口" class="headerlink" title="添加指定IP可以访问本机的某端口"></a>添加指定IP可以访问本机的某端口</h3><p>iptables -I INPUT -s xx.xx.xx.xx(IP) -p all –dport 8080 -j ACCEPT</p>
-<h3 id="查看当前配置的规则"><a href="#查看当前配置的规则" class="headerlink" title="查看当前配置的规则"></a>查看当前配置的规则</h3><p>iptables -nvL</p>
-<h3 id="保存当前配置的结果"><a href="#保存当前配置的结果" class="headerlink" title="保存当前配置的结果"></a>保存当前配置的结果</h3><p>iptabels-save 【默认保存结果在 &#x2F;etc&#x2F;sysconfig&#x2F;iptables】</p>
-<h3 id="删除规则"><a href="#删除规则" class="headerlink" title="删除规则"></a>删除规则</h3><p>iptables -D INPUT 2</p>
-<p>可配合如下语句显示编号使用：</p>
-<p>iptables -nvL –line-numbers</p>
-<h3 id="从配置中载入规则"><a href="#从配置中载入规则" class="headerlink" title="从配置中载入规则"></a>从配置中载入规则</h3><p>iptables-restore &lt; &#x2F;etc&#x2F;sysconfig&#x2F;iptables</p>
-<h3 id="iptabels-和docker的配置"><a href="#iptabels-和docker的配置" class="headerlink" title="iptabels 和docker的配置"></a>iptabels 和docker的配置</h3><p>如果使用了docker 那需要额外添加关于docker的规则。</p>
-<p>a.首先查看docker通信的IP地址（ifconfig），假如docker地址是：172.18.0.1</p>
-<pre><code>  配置规则：iptables -A INPUT -s 172.18.0.0/24 -j ACCEPT
-</code></pre>
-<h3 id="重启和停止-一般是这样，我测试的时候报错没有这个命令，可能是我系统有问题"><a href="#重启和停止-一般是这样，我测试的时候报错没有这个命令，可能是我系统有问题" class="headerlink" title="重启和停止-(一般是这样，我测试的时候报错没有这个命令，可能是我系统有问题)"></a>重启和停止-(一般是这样，我测试的时候报错没有这个命令，可能是我系统有问题)</h3><p>service iptables stop<br>service iptables start</p>
-<h3 id="追加规则"><a href="#追加规则" class="headerlink" title="追加规则"></a>追加规则</h3><p>iptables -A  命令追加新规则</p>
-<h3 id="一些语句样例"><a href="#一些语句样例" class="headerlink" title="一些语句样例"></a>一些语句样例</h3><h4 id="将本地访问本地的4444端口的流量转发到本地的22端口"><a href="#将本地访问本地的4444端口的流量转发到本地的22端口" class="headerlink" title="将本地访问本地的4444端口的流量转发到本地的22端口"></a>将本地访问本地的4444端口的流量转发到本地的22端口</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables -t nat -A OUTPUT -p tcp --dport 4444 -j REDIRECT --to-ports 22</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h4 id="开放指定的端口"><a href="#开放指定的端口" class="headerlink" title="开放指定的端口"></a>开放指定的端口</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">iptables -A INPUT -s 127.0.0.1 -d 127.0.0.1 -j ACCEPT               #允许本地回环接口(即运行本机访问本机)</span><br><span class="line">iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT    #允许已建立的或相关连的通行</span><br><span class="line">iptables -A OUTPUT -j ACCEPT         #允许所有本机向外的访问</span><br><span class="line">iptables -A INPUT -p tcp --dport 22 -j ACCEPT    #允许访问22端口</span><br><span class="line">iptables -A INPUT -p tcp --dport 80 -j ACCEPT    #允许访问80端口</span><br><span class="line">iptables -A INPUT -p tcp --dport 21 -j ACCEPT    #允许ftp服务的21端口</span><br><span class="line">iptables -A INPUT -p tcp --dport 20 -j ACCEPT    #允许FTP服务的20端口</span><br><span class="line">iptables -A INPUT -j reject       #禁止其他未允许的规则访问</span><br><span class="line">iptables -A FORWARD -j REJECT     #禁止其他未允许的规则访问</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="屏蔽IP"><a href="#屏蔽IP" class="headerlink" title="屏蔽IP"></a>屏蔽IP</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">iptables -I INPUT -s 123.45.6.7 -j DROP #屏蔽单个IP的命令</span><br><span class="line">iptables -I INPUT -s 123.0.0.0/8 -j DROP #封整个段即从123.0.0.1到123.255.255.254的命令</span><br><span class="line">iptables -I INPUT -s 124.45.0.0/16 -j DROP #封IP段即从123.45.0.1到123.45.255.254的命令</span><br><span class="line">iptables -I INPUT -s 123.45.6.0/24 -j DROP #封IP段即从123.45.6.1到123.45.6.254的命令是</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="命令参数介绍"><a href="#命令参数介绍" class="headerlink" title="命令参数介绍"></a>命令参数介绍</h3><p>(参考:[<a target="_blank" rel="noopener" href="https://blog.csdn.net/u011537073/article/details/82685586]">https://blog.csdn.net/u011537073/article/details/82685586]</a> 侵删)</p>
-<p><strong>-p 协议（protocol）</strong></p>
-<ul>
-<li>指定规则的协议，如tcp, udp, icmp等，可以使用all来指定所有协议。</li>
-<li>如果不指定-p参数，则默认是all值。这并不明智，请总是明确指定协议名称。</li>
-<li>可以使用协议名(如tcp)，或者是协议值（比如6代表tcp）来指定协议。映射关系请查看&#x2F;etc&#x2F;protocols</li>
-<li>还可以使用–protocol参数代替-p参数</li>
-</ul>
-<p><strong>-s 源地址（source）</strong></p>
-<p>指定数据包的源地址</p>
-<ul>
-<li><p>参数可以使IP地址、网络地址、主机名</p>
-</li>
-<li><p>例如：-s 192.168.1.101指定IP地址</p>
-</li>
-<li><p>例如：-s 192.168.1.10&#x2F;24指定网络地址</p>
-</li>
-<li><p>如果不指定-s参数，就代表所有地址</p>
-</li>
-<li><p>还可以使用–src或者–source</p>
-</li>
-</ul>
-<p><strong>-d 目的地址（destination）</strong></p>
-<ul>
-<li><p>指定目的地址</p>
-</li>
-<li><p>参数和-s相同</p>
-</li>
-<li><p>还可以使用–dst或者–destination</p>
-</li>
-</ul>
-<p><strong>-j 执行目标（jump to target）</strong></p>
-<ul>
-<li><p>-j代表”jump to target”</p>
-</li>
-<li><p>-j指定了当与规则(Rule)匹配时如何处理数据包</p>
-</li>
-<li><p>可能的值是ACCEPT, DROP, QUEUE, RETURN，MASQUERADE</p>
-</li>
-<li><p>还可以指定其他链（Chain）作为目标</p>
-</li>
-</ul>
-<p>注：MASQUERADE，地址伪装，算是snat中的一种特例，可以实现自动化的snat（详情见上一篇文章）。</p>
-<p><strong>-i 输入接口（input interface）</strong></p>
-<ul>
-<li><p>-i代表输入接口(input interface)</p>
-</li>
-<li><p>-i指定了要处理来自哪个接口的数据包</p>
-</li>
-<li><p>这些数据包即将进入INPUT, FORWARD, PREROUTE链</p>
-</li>
-<li><p>例如：-i eth0指定了要处理经由eth0进入的数据包</p>
-</li>
-<li><p>如果不指定-i参数，那么将处理进入所有接口的数据包</p>
-</li>
-<li><p>如果出现! -i eth0，那么将处理所有经由eth0以外的接口进入的数据包</p>
-</li>
-<li><p>如果出现-i eth+，那么将处理所有经由eth开头的接口进入的数据包</p>
-</li>
-</ul>
-<p>还可以使用–in-interface参数</p>
-<p><strong>-o 输出（out interface）</strong></p>
-<ul>
-<li><p>-o代表”output interface”</p>
-</li>
-<li><p>-o指定了数据包由哪个接口输出</p>
-</li>
-<li><p>这些数据包即将进入FORWARD, OUTPUT, POSTROUTING链</p>
-</li>
-<li><p>如果不指定-o选项，那么系统上的所有接口都可以作为输出接口</p>
-</li>
-<li><p>如果出现! -o eth0，那么将从eth0以外的接口输出</p>
-</li>
-<li><p>如果出现-i eth+，那么将仅从eth开头的接口输出</p>
-</li>
-<li><p>还可以使用–out-interface参数</p>
-</li>
-</ul>
-<p><strong>–sport 源端口（source port）针对 -p tcp 或者 -p udp</strong></p>
-<ul>
-<li><p>缺省情况下，将匹配所有端口</p>
-</li>
-<li><p>可以指定端口号或者端口名称，例如”–sport 22″与”–sport ssh”。</p>
-</li>
-<li><p>&#x2F;etc&#x2F;services文件描述了上述映射关系。</p>
-</li>
-<li><p>从性能上讲，使用端口号更好</p>
-</li>
-<li><p>使用冒号可以匹配端口范围，如”–sport 22:100″</p>
-</li>
-<li><p>还可以使用”–source-port”</p>
-</li>
-</ul>
-<p><strong>–-dport 目的端口（destination port）针对-p tcp 或者 -p udp</strong></p>
-<ul>
-<li><p>参数和–sport类似</p>
-</li>
-<li><p>还可以使用”–destination-port”</p>
-</li>
-</ul>
-<p><strong>-–tcp-flags TCP标志 针对-p tcp</strong></p>
-<p>可以指定由逗号分隔的多个参数</p>
-<ul>
-<li><p>有效值可以是：SYN, ACK, FIN, RST, URG, PSH</p>
-</li>
-<li><p>可以使用ALL或者NONE</p>
-</li>
-</ul>
-<p><strong>-–icmp-type ICMP类型 针对-p icmp</strong></p>
-<ul>
-<li><p>–icmp-type 0 表示Echo Reply</p>
-</li>
-<li><p>–icmp-type 8 表示Echo</p>
-</li>
-</ul>
-
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/iptables-%E9%85%8D%E7%BD%AE%E5%BD%92%E7%BA%B3%E6%80%BB%E7%BB%93/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -468,9 +341,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:18:26 / 修改时间：11:18:34" itemprop="dateCreated datePublished" datetime="2024-09-10T11:18:26+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:18:26" itemprop="dateCreated datePublished" datetime="2024-09-10T11:18:26+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -483,7 +362,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vmhgfs-fuse .host:/ /mnt/ -o nonempty -o allow_other</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/vmware%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8D%E6%98%BE%E7%A4%BA/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -537,9 +424,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:18:03 / 修改时间：11:18:08" itemprop="dateCreated datePublished" datetime="2024-09-10T11:18:03+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:18:03" itemprop="dateCreated datePublished" datetime="2024-09-10T11:18:03+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -552,20 +445,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h4 id="0xX-汇总版"><a href="#0xX-汇总版" class="headerlink" title="0xX 汇总版"></a>0xX 汇总版</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fdisk -l</span><br><span class="line">fdisk /dev/vdb</span><br><span class="line">mkfs.ext4 /dev/vdb</span><br><span class="line">mkdir /data</span><br><span class="line">mount /dev/vdb /data</span><br><span class="line">echo  &#x27;/dev/vdb /data ext4 defaults 0 0&#x27; &gt;&gt; /etc/fstab</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x0-查看待使用的硬盘"><a href="#0x0-查看待使用的硬盘" class="headerlink" title="0x0 查看待使用的硬盘"></a>0x0 查看待使用的硬盘</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@test ops]# fdisk -l</span><br><span class="line"></span><br><span class="line">Disk /dev/vda: 107.4 GB, 107374182400 bytes, 209715200 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label type: dos</span><br><span class="line">Disk identifier: 0x000c9a87</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/vda1   *        2048   209715166   104856559+  83  Linux</span><br><span class="line"></span><br><span class="line">Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line">[root@test /]#</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="0x1-分区"><a href="#0x1-分区" class="headerlink" title="0x1 分区"></a>0x1 分区</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[root@test /]# fdisk /dev/vdb</span><br><span class="line">Welcome to fdisk (util-linux 2.23.2).</span><br><span class="line"></span><br><span class="line">Changes will remain in memory only, until you decide to write them.</span><br><span class="line">Be careful before using the write command.</span><br><span class="line"></span><br><span class="line">Device does not contain a recognized partition table</span><br><span class="line">Building a new DOS disklabel with disk identifier 0x9f371d89.</span><br><span class="line"></span><br><span class="line">Command (m for help): n</span><br><span class="line">Partition type:</span><br><span class="line">   p   primary (0 primary, 0 extended, 4 free)</span><br><span class="line">   e   extended</span><br><span class="line">Select (default p): p</span><br><span class="line">Partition number (1-4, default 1): 1</span><br><span class="line">First sector (2048-4194303999, default 2048): </span><br><span class="line">Using default value 2048</span><br><span class="line">Last sector, +sectors or +size&#123;K,M,G&#125; (2048-4194303999, default 4194303999): </span><br><span class="line">Using default value 4194303999</span><br><span class="line">Partition 1 of type Linux and of size 2 TiB is set</span><br><span class="line"></span><br><span class="line">Command (m for help): q</span><br><span class="line"></span><br><span class="line">[root@test /]#</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="0x2-格式化"><a href="#0x2-格式化" class="headerlink" title="0x2 格式化"></a>0x2 格式化</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[root@test /]# mkfs.ext4 /dev/vdb</span><br><span class="line">mke2fs 1.42.9 (28-Dec-2013)</span><br><span class="line">Filesystem label=</span><br><span class="line">OS type: Linux</span><br><span class="line">Block size=4096 (log=2)</span><br><span class="line">Fragment size=4096 (log=2)</span><br><span class="line">Stride=0 blocks, Stripe width=0 blocks</span><br><span class="line">131072000 inodes, 524288000 blocks</span><br><span class="line">26214400 blocks (5.00%) reserved for the super user</span><br><span class="line">First data block=0</span><br><span class="line">Maximum filesystem blocks=2671771648</span><br><span class="line">16000 block groups</span><br><span class="line">32768 blocks per group, 32768 fragments per group</span><br><span class="line">8192 inodes per group</span><br><span class="line">Superblock backups stored on blocks: </span><br><span class="line">        32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208, </span><br><span class="line">        4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968, </span><br><span class="line">        102400000, 214990848, 512000000</span><br><span class="line"></span><br><span class="line">Allocating group tables: done                            </span><br><span class="line">Writing inode tables: done                            </span><br><span class="line">Creating journal (32768 blocks): done</span><br><span class="line">Writing superblocks and filesystem accounting information: done</span><br><span class="line"></span><br><span class="line">[root@test /]#</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="0x4-挂载"><a href="#0x4-挂载" class="headerlink" title="0x4 挂载"></a>0x4 挂载</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@test /]# mkdir /data   #新建一个目录用于挂载硬盘</span><br><span class="line">[root@test /]# mount /dev/vdb /data   #挂载</span><br><span class="line">[root@test /]# df -h</span><br><span class="line">Filesystem      Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs        7.7G     0  7.7G   0% /dev</span><br><span class="line">tmpfs           7.7G     0  7.7G   0% /dev/shm</span><br><span class="line">tmpfs           7.7G  452K  7.7G   1% /run</span><br><span class="line">tmpfs           7.7G     0  7.7G   0% /sys/fs/cgroup</span><br><span class="line">/dev/vda1        99G  5.3G   89G   6% /</span><br><span class="line">tmpfs           1.6G     0  1.6G   0% /run/user/1000</span><br><span class="line">/dev/vdb        2.0T   81M  1.9T   1% /data</span><br><span class="line">[root@test /]#</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x5-设置开机自动挂载"><a href="#0x5-设置开机自动挂载" class="headerlink" title="0x5 设置开机自动挂载"></a>0x5 设置开机自动挂载</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@test /]# echo  &#x27;/dev/vdb /data ext4 defaults 0 0&#x27; &gt;&gt; /etc/fstab</span><br><span class="line">[root@test /]# cat /etc/fstab </span><br><span class="line"></span><br><span class="line">#</span><br><span class="line"># /etc/fstab</span><br><span class="line"># Created by anaconda on Tue Mar 22 07:12:23 2022</span><br><span class="line">#</span><br><span class="line"># Accessible filesystems, by reference, are maintained under &#x27;/dev/disk&#x27;</span><br><span class="line"># See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info</span><br><span class="line">#</span><br><span class="line">UUID=9c8d46a4-6089-4e07-91bf-e6b0ee93c966 /                       ext4    defaults        1 1</span><br><span class="line">/dev/vdb /data ext4 defaults 0 0</span><br><span class="line">[root@test /]#</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/linux%E4%B8%8B%E7%A1%AC%E7%9B%98%E5%88%86%E5%8C%BA%E3%80%81%E6%A0%BC%E5%BC%8F%E3%80%81%E6%8C%82%E8%BD%BD/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -619,9 +507,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:17:38 / 修改时间：11:17:42" itemprop="dateCreated datePublished" datetime="2024-09-10T11:17:38+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:17:38" itemprop="dateCreated datePublished" datetime="2024-09-10T11:17:38+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -634,7 +528,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo gedit /etc/NetworkManager/NetworkManager.conf 将managed=False改成True</span><br><span class="line"></span><br><span class="line">service network-manager stop</span><br><span class="line"></span><br><span class="line">sudo rm /var/lib/NetworkManager/NetworkManager.state </span><br><span class="line"></span><br><span class="line">service network-manager start</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/vmware%E4%B8%ADubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%B2%A1%E6%9C%89wired%E5%9B%BE%E6%A0%87%E8%BF%9E%E4%B8%8D%E4%B8%8A%E6%97%A0%E7%BA%BF%E7%BD%91/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -688,9 +590,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:16:40 / 修改时间：11:16:42" itemprop="dateCreated datePublished" datetime="2024-09-10T11:16:40+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:16:40" itemprop="dateCreated datePublished" datetime="2024-09-10T11:16:40+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -703,33 +611,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="0x1-停止服务"><a href="#0x1-停止服务" class="headerlink" title="0x1 停止服务"></a>0x1 停止服务</h3><blockquote>
-<p>不同操作系统停止服务方式不一样</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop mysqld </span><br><span class="line"></span><br><span class="line">systemctl status mysqld   #查看状态</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="0x2-更新配置"><a href="#0x2-更新配置" class="headerlink" title="0x2 更新配置"></a>0x2 更新配置</h3><p>在 <strong>&#x2F;etc&#x2F;my.cnf</strong> 中添加如下配置项,即可跳过登录认证</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">skip_grant_tables=1</span><br></pre></td></tr></table></figure>
-<p>更新完后然后启动服务</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mysqld </span><br></pre></td></tr></table></figure>
-
-<h3 id="0x3-更改密码"><a href="#0x3-更改密码" class="headerlink" title="0x3 更改密码"></a>0x3 更改密码</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#&gt; mysql</span><br><span class="line">mysql&gt; use mysql;</span><br><span class="line">Database changed</span><br><span class="line"></span><br><span class="line">mysql&gt; update user set authentication_string=&#x27;root&#x27; where user=&#x27;root&#x27;;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; flush privileges;</span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; quit</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x4-删除配置文件"><a href="#0x4-删除配置文件" class="headerlink" title="0x4 删除配置文件"></a>0x4 删除配置文件</h3><p>编辑 &#x2F;etc&#x2F;my.cnf 把 “skip_grant_tables&#x3D;1” 删除即可</p>
-<h3 id="0x5-一些命令和坑"><a href="#0x5-一些命令和坑" class="headerlink" title="0x5 一些命令和坑"></a>0x5 一些命令和坑</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">update mysql.user set authentication_string=password(&#x27;root&#x27;)  where user=&#x27;root&#x27; and host=&#x27;localhost&#x27;;</span><br><span class="line"></span><br><span class="line">update user set authentication_string=&#x27;root&#x27; where user=&#x27;root&#x27;;</span><br><span class="line"></span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;root&#x27; WITH GRANT OPTION;</span><br><span class="line"></span><br><span class="line">ALTER USER &quot;root&quot;@&quot;localhost&quot; IDENTIFIED  BY &quot;123456&quot;;</span><br><span class="line"></span><br><span class="line">set global validate_password.length=4;</span><br><span class="line"></span><br><span class="line">set global validate_password.policy=LOW; </span><br><span class="line"></span><br><span class="line">SHOW VARIABLES LIKE &#x27;validate_password%&#x27;;</span><br><span class="line"></span><br><span class="line">ALTER USER &#x27;root&#x27;@&#x27;%&#x27; IDENTIFIED WITH MYSQL_NATIVE_PASSWORD BY &#x27;123456&#x27;;</span><br><span class="line"></span><br><span class="line">select host,user from user;</span><br><span class="line"></span><br><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;123456&#x27; PASSWORD EXPIRE NEVER;</span><br></pre></td></tr></table></figure>
-
-<h4 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;123456&#x27; PASSWORD EXPIRE NEVER;</span><br></pre></td></tr></table></figure>
-
-<h4 id="获取第一次安装密码"><a href="#获取第一次安装密码" class="headerlink" title="获取第一次安装密码"></a>获取第一次安装密码</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep &#x27;temporary password&#x27; /var/log/mysqld.log</span><br></pre></td></tr></table></figure>
-
-<h4 id="此前安装过要删除旧数据"><a href="#此前安装过要删除旧数据" class="headerlink" title="此前安装过要删除旧数据"></a>此前安装过要删除旧数据</h4><p>删除原来安装过的mysql残留的数据</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -rf /var/lib/mysql</span><br></pre></td></tr></table></figure>
-
-<h4 id="开启远程登录"><a href="#开启远程登录" class="headerlink" title="开启远程登录"></a>开启远程登录</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1.连接服务器: mysql -u root -p</span><br><span class="line">2.看当前所有数据库：show databases;</span><br><span class="line">3.进入mysql数据库：use mysql;</span><br><span class="line">4.查看mysql数据库中所有的表：show tables;</span><br><span class="line">5.查看user表中的数据：select Host, User,Password from user;</span><br><span class="line">6.修改user表中的Host:   update user set Host=&#x27;%&#x27; where User=&#x27;root&#x27;;  </span><br><span class="line">  - 说明： % 代表任意的客户端,可替换成具体IP地址。</span><br><span class="line">7.最后刷新一下：flush privileges;</span><br><span class="line">8. 注意：一定要记得在写sql的时候要在语句完成后加上&quot; ; &quot;</span><br></pre></td></tr></table></figure>
-
-<h4 id="配置默认编码为utf8"><a href="#配置默认编码为utf8" class="headerlink" title="配置默认编码为utf8"></a>配置默认编码为utf8</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/my.cnf #添加 [mysqld] character_set_server=utf8 init_connect=&#x27;SET NAMES utf8&#x27;</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/mysql-5-7-%E5%BF%98%E8%AE%B0%E5%AF%86%E7%A0%81-%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -783,9 +673,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:16:25 / 修改时间：11:16:28" itemprop="dateCreated datePublished" datetime="2024-09-10T11:16:25+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:16:25" itemprop="dateCreated datePublished" datetime="2024-09-10T11:16:25+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -798,20 +694,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="0x0-申请域名并解析到你的IP"><a href="#0x0-申请域名并解析到你的IP" class="headerlink" title="0x0 申请域名并解析到你的IP"></a>0x0 申请域名并解析到你的IP</h3><p>域名注册推荐去<a target="_blank" rel="noopener" href="https://www.godaddy.com/">godaddy</a><br>常用解析说明：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">www   常见主机记录，将域名解析为 www.abc.com</span><br><span class="line">@     直接解析主域名 abc.com</span><br><span class="line">mail  将域名解析为 mail.abc.com，通常用于邮件服务</span><br><span class="line">*     泛解析，匹配其他所有域名 *.abc.com</span><br></pre></td></tr></table></figure>
-
-<p>这里我们以【<a target="_blank" rel="noopener" href="http://www.abc.com】为例/">www.abc.com】为例</a></p>
-<h3 id="0x1-安装-certbot"><a href="#0x1-安装-certbot" class="headerlink" title="0x1 安装 certbot"></a>0x1 安装 certbot</h3><p>用户申请免费的证书</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install certbot</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x3-申请证书"><a href="#0x3-申请证书" class="headerlink" title="0x3 申请证书"></a>0x3 申请证书</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">certbot certonly  --email abc@gmail.com -d www.abc.com</span><br><span class="line">#好了之后会在如下目录生成证书文件</span><br><span class="line">/etc/letsencrypt/live/www.abc.com</span><br><span class="line"></span><br><span class="line">[root@LfiekAe www.abc.com]# ls</span><br><span class="line">cert.pem  chain.pem  fullchain.pem  privkey.pem  README</span><br><span class="line">[root@LfiekAe www.abc.com]#</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x4-配置"><a href="#0x4-配置" class="headerlink" title="0x4 配置"></a>0x4 配置</h3><p>设置443端口的配置</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">        listen 443 ssl;</span><br><span class="line">        listen [::]:443 ssl;</span><br><span class="line">        server_name www.abc.com;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        ssl_certificate      /etc/nginx/ssl/fullchain.pem;    #这个是certbot生成的证书文件</span><br><span class="line">        ssl_certificate_key  /etc/nginx/ssl/privkey.pem;      #这个是certbot生成的证书文件</span><br><span class="line">        ssl_session_cache    shared:SSL:1m;</span><br><span class="line">        ssl_session_timeout  5m;</span><br><span class="line">        ssl_protocols TLSv1.2;</span><br><span class="line">        ssl_prefer_server_ciphers on;</span><br><span class="line">        ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">                root /usr/www/wkg;</span><br><span class="line">                index index.html index.htm;</span><br><span class="line">                try_files $uri $uri/ /index.html;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location /api/ &#123;</span><br><span class="line">                proxy_pass http://127.0.0.1:7788/;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        location /ws/ &#123;</span><br><span class="line"></span><br><span class="line">                proxy_pass http://127.0.0.1:7788/;</span><br><span class="line">                proxy_http_version 1.1;</span><br><span class="line">                proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">                proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>80端口的配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">        listen 80;</span><br><span class="line">        server_name localhost;</span><br><span class="line">        rewrite ^(.*)$ https://$host$1 permanent;    #重定向到https</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/%E7%BD%91%E7%AB%99%E8%AE%BE%E7%BD%AEhttps%E8%AE%BF%E9%97%AE/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -865,9 +756,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:16:01 / 修改时间：11:16:06" itemprop="dateCreated datePublished" datetime="2024-09-10T11:16:01+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:16:01" itemprop="dateCreated datePublished" datetime="2024-09-10T11:16:01+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -880,15 +777,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>用yum安装的nginx，报unknown directive “stream”</p>
-<p>解决方法：yum install nginx-mod-stream -y</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost modules]# yum install nginx-mod-stream -y</span><br><span class="line"></span><br><span class="line">已安装:</span><br><span class="line">  nginx-mod-stream.x86_64 1:1.20.1-2.el7</span><br></pre></td></tr></table></figure>
-<p>安装位置</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# ll /usr/lib64/nginx/modules</span><br><span class="line">总用量 176</span><br><span class="line">-rwxr-xr-x 1 root root 179864 6月   2 08:24 ngx_stream_module.so</span><br></pre></td></tr></table></figure>
-<p>nginx配置文件引入stream模块</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat /etc/nginx/nginx.conf</span><br><span class="line"># 加载stream模块</span><br><span class="line">load_module /usr/lib64/nginx/modules/ngx_stream_module.so;</span><br><span class="line">user  nginx;</span><br><span class="line">worker_processes  auto;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-<p>nginx新版本已经不需要load</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/nginx/nginx.conf</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# nginx -t</span><br><span class="line">nginx: [emerg] unknown directive &quot;ELF&quot; in /usr/lib64/nginx/modules/ngx_stream_module.so:4</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test failed</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# vim /etc/nginx/nginx.conf</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# nginx -t</span><br><span class="line">nginx: [emerg] module &quot;ngx_stream_module&quot; is already loaded in /usr/share/nginx/modules/mod-stream.conf:1</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test failed</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# nginx -v</span><br><span class="line">nginx version: nginx/1.20.1</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/%E7%94%A8yum%E5%AE%89%E8%A3%85%E7%9A%84nginx%EF%BC%8C%E6%8A%A5unknown-directive-%E2%80%9Cstream%E2%80%9D/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -942,9 +839,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:15:39 / 修改时间：11:15:42" itemprop="dateCreated datePublished" datetime="2024-09-10T11:15:39+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:15:39" itemprop="dateCreated datePublished" datetime="2024-09-10T11:15:39+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -957,10 +860,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h4 id="0x0-配置一"><a href="#0x0-配置一" class="headerlink" title="0x0 配置一"></a>0x0 配置一</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">	listen 3000;</span><br><span class="line">        server_name localhost;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">        #重写后端服务器的location和refresh头</span><br><span class="line">        #proxy_redirect on;  </span><br><span class="line">        location / &#123;</span><br><span class="line">           	root /usr/www/wkg;</span><br><span class="line">		index index.html index.htm;</span><br><span class="line">		try_files $uri $uri/ /index.html;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">	location /api/ &#123;</span><br><span class="line">		proxy_pass http://127.0.0.1:7788/;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	location /ws/ &#123;</span><br><span class="line">		</span><br><span class="line">		proxy_pass http://127.0.0.1:7788/;</span><br><span class="line">		proxy_http_version 1.1;</span><br><span class="line">            	proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">		proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="0x1-配置二"><a href="#0x1-配置二" class="headerlink" title="0x1 配置二"></a>0x1 配置二</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">stream &#123;</span><br><span class="line">  upstream grpcservers &#123; server 10.43.48.14:6751;&#125;</span><br><span class="line">  server &#123;</span><br><span class="line">      listen 8090;</span><br><span class="line">  	listen [::]:8090;</span><br><span class="line">  	proxy_pass grpcservers;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h4 id="0x2配置三"><a href="#0x2配置三" class="headerlink" title="0x2配置三"></a>0x2配置三</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">load_module /usr/lib64/nginx/modules/ngx_stream_module.so;</span><br><span class="line"></span><br><span class="line">#stream &#123;</span><br><span class="line">#    upstream manager &#123;</span><br><span class="line">#        server 10.43.48.14:8082;</span><br><span class="line">#    &#125;</span><br><span class="line">#    server &#123;</span><br><span class="line">#        listen 80; </span><br><span class="line">#        proxy_pass manager;</span><br><span class="line">#    &#125;</span><br><span class="line">#&#125;</span><br><span class="line"></span><br><span class="line">events&#123;</span><br><span class="line">	worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">stream&#123;</span><br><span class="line">	upstream kafka &#123; server 10.43.48.22:9092;&#125;</span><br><span class="line">	server&#123;</span><br><span class="line">	 listen 443;</span><br><span class="line">	 listen [::]:443;</span><br><span class="line">	 proxy_pass kafka;	</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">        upstream localserver &#123;</span><br><span class="line">           server 10.43.48.14:8082;</span><br><span class="line">        &#125;</span><br><span class="line">	</span><br><span class="line">	upstream manager &#123;</span><br><span class="line">	  server 10.43.48.44:6701;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	server&#123;	</span><br><span class="line">	  listen 80;</span><br><span class="line">	  location / &#123;</span><br><span class="line">	     proxy_pass http://localserver;</span><br><span class="line">	     proxy_set_header Host $host;</span><br><span class="line">	   &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	server&#123;</span><br><span class="line">	  listen 6701;</span><br><span class="line">	  location / &#123;</span><br><span class="line">		proxy_pass http://manager;	</span><br><span class="line">	  &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/nginx%E5%B8%B8%E8%A7%84%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1014,9 +922,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:14:25 / 修改时间：11:47:57" itemprop="dateCreated datePublished" datetime="2024-09-10T11:14:25+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:14:25" itemprop="dateCreated datePublished" datetime="2024-09-10T11:14:25+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -1029,39 +943,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="0x0-测试环境"><a href="#0x0-测试环境" class="headerlink" title="0x0 测试环境"></a>0x0 测试环境</h3><p>服务器</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">操作系统：centos 7</span><br><span class="line">IP：42.13.23.62</span><br></pre></td></tr></table></figure>
-<p>客户端</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">操作系统: centos 7</span><br><span class="line">IP： 10.20.20.88</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x1-反向代理ssh"><a href="#0x1-反向代理ssh" class="headerlink" title="0x1 反向代理ssh"></a>0x1 反向代理ssh</h3><h4 id="首先自己下载源码编译一份"><a href="#首先自己下载源码编译一份" class="headerlink" title="首先自己下载源码编译一份"></a>首先自己下载源码编译一份</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ https://github.com/Mob2003/rakshasa</span><br><span class="line">$ cd rakshasa</span><br></pre></td></tr></table></figure>
-
-<h3 id="设置环境"><a href="#设置环境" class="headerlink" title="设置环境"></a>设置环境</h3><p>1.安装golang环境</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install goalng</span><br><span class="line">或者</span><br><span class="line">手动下载安装</span><br></pre></td></tr></table></figure>
-<p>2.设置国内的代理 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go env -w GOPROXY=https://goproxy.cn,direct</span><br></pre></td></tr></table></figure>
-
-<p>3.编译<br>为什么需要重新编译呢，因为官方的二进制包内置了默认的证书，该证书已经公开且泄露了，所以自己重新生成证书再编译，确保信息不会泄露</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">重新生成一份证书，默认证书已经泄露</span><br><span class="line">go run build.go -gencert</span><br><span class="line"></span><br><span class="line">生成可执行文件</span><br><span class="line">go run build.go -fullnode</span><br><span class="line"></span><br><span class="line">生成所有端的可执行文件，看个人需求了</span><br><span class="line">go run build -all</span><br></pre></td></tr></table></figure>
-<p>如果使用-all参数编译好后，会在当前bin目录生成所有端的可执行文件 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@10.20.20.88 bin]# ls</span><br><span class="line">rakshasa_fullnode_amd64_darwin       rakshasa_fullnode_amd64_lite_linux    rakshasa_fullnode_lite_amd64_darwin   rakshasa_node_amd64_darwin   rakshasa_node_lite_amd64_darwin</span><br><span class="line">rakshasa_fullnode_amd64_linux        rakshasa_fullnode_amd64_lite_win.exe  rakshasa_fullnode_lite_amd64_linux    rakshasa_node_amd64_linux    rakshasa_node_lite_amd64_linux</span><br><span class="line">rakshasa_fullnode_amd64_lite_darwin  rakshasa_fullnode_amd64_win.exe       rakshasa_fullnode_lite_amd64_win.exe  rakshasa_node_amd64_win.exe  rakshasa_node_lite_amd64_win.exe</span><br></pre></td></tr></table></figure>
-
-<p>根据操作系统，把文件拷贝到对应的服务端和客户端</p>
-<p>在服务端执行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@42.13.23.62 ~]# ./rakshasa_fullnode_amd64_linux -p 7549 -nocli</span><br></pre></td></tr></table></figure>
-
-<p>在客户端执行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@10.20.20.88 bin]#./rakshasa_fullnode_amd64_linux -bind 127.0.0.1:22,0.0.0.0:7548 -d 42.13.23.62:7549  --nocli</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>解释一下，这两条命令就是把 本机【10.20.20.88】的【22】端口映射到【42.13.23.62】的【7548】端口，7549只是客户端和服务端通讯的端口</p>
-</blockquote>
-<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>我们在我们自己的机器上打开一个powershell（带有ssh命令的）<br>连接我们的【42.13.23.62】的【7548】端口</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\test\Desktop&gt; ssh root@42.13.23.62 -p 7548</span><br><span class="line">The authenticity of host &#x27;[42.13.23.62]:7548 ([42.13.23.62]:7548)&#x27; can&#x27;t be established.</span><br><span class="line">ECDSA key fingerprint is SHA256:8R2q3T2OpJoAFPB0rFZWYySoBzQLzjubaf63UO+Dwc8.</span><br><span class="line">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span><br><span class="line">Warning: Permanently added &#x27;[42.13.23.62]:7548&#x27; (ECDSA) to the list of known hosts.</span><br><span class="line">Authorized only. All activity will be monitored and reported</span><br><span class="line">root@42.13.23.62&#x27;s password:</span><br><span class="line">Last login: Sun Apr 23 09:16:00 2023 from localhost</span><br><span class="line">[root@mail ~]$ pwd</span><br></pre></td></tr></table></figure>
-
-
-<p>连接成功</p>
-
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/rakshasa-%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1115,9 +1005,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:13:50 / 修改时间：14:13:51" itemprop="dateCreated datePublished" datetime="2024-09-10T11:13:50+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:13:50" itemprop="dateCreated datePublished" datetime="2024-09-10T11:13:50+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:51" itemprop="dateModified" datetime="2024-10-10T18:17:51+08:00">2024-10-10</time>
     </span>
 
   
@@ -1130,59 +1026,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>docker在自家的虚拟机里通过frp代理到公网进行访问。</p>
-<h3 id="0x1-安装docker"><a href="#0x1-安装docker" class="headerlink" title="0x1 安装docker"></a>0x1 安装docker</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># yum update -y</span><br><span class="line"># yum install -y yum-utils device-mapper-persistent-data lvm2</span><br><span class="line"># yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line"># yum install docker-ce docker-ce-cli conntainerd.io</span><br><span class="line"># systemctl enable docker</span><br><span class="line"># systemctl start docker</span><br><span class="line"># docker version  //查看版本，确认安装成功</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="0x2-安装docker-compose"><a href="#0x2-安装docker-compose" class="headerlink" title="0x2 安装docker-compose"></a>0x2 安装docker-compose</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># sudo curl -L &quot;https://github.com/docker/compose/releases/download/2.16.0/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose</span><br><span class="line">//这条命令我这一直失败，我直接去仓库看了一下版本拉取了</span><br><span class="line"># curl -L &quot;https://github.com/docker/compose/releases/download/v2.16.0/docker-compose-linux-x86_64&quot; -o /usr/local/bin/docker-compose</span><br><span class="line"># chmod +x /usr/local/bin/docker-compose</span><br><span class="line"># docker-compose version    //查看版本确认安装成功</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x3-部署"><a href="#0x3-部署" class="headerlink" title="0x3 部署"></a>0x3 部署</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># cd ~</span><br><span class="line"># mkdir bitwarden</span><br><span class="line"># cd bitwarden</span><br><span class="line"># vim  docker-compose.yml</span><br></pre></td></tr></table></figure>
-
-<p>填入如下内容 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># docker-compose.yml</span><br><span class="line">version: &#x27;3&#x27;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  bitwarden:</span><br><span class="line">    image: vaultwarden/server:latest</span><br><span class="line">    restart: always</span><br><span class="line">    ports:</span><br><span class="line">      - 8000:80</span><br><span class="line">    volumes:</span><br><span class="line">      - ./bw-data:/data</span><br><span class="line">    environment:</span><br><span class="line">      WEBSOCKET_ENABLED: &#x27;true&#x27; # Required to use websockets</span><br><span class="line">      SIGNUPS_ALLOWED: &#x27;true&#x27;   # set to false to disable signups</span><br></pre></td></tr></table></figure>
-
-<p>拉取摬像</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># sudo docker-compose up -d</span><br></pre></td></tr></table></figure>
-
-<p>官方文档提供多种方式使用HTTPs访问，这里我们采用nginx反向代理+自签名证书的方式来进行HTTPs访问</p>
-<h3 id="0x4-安装nginx"><a href="#0x4-安装nginx" class="headerlink" title="0x4 安装nginx"></a>0x4 安装nginx</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># yum install nginx -y</span><br><span class="line"># systemctl start nginx</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="0x5-安装mkcert并生成证书"><a href="#0x5-安装mkcert并生成证书" class="headerlink" title="0x5 安装mkcert并生成证书"></a>0x5 安装mkcert并生成证书</h3><h4 id="安装mkcert"><a href="#安装mkcert" class="headerlink" title="安装mkcert"></a>安装mkcert</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># git clone https://github.com/FiloSottile/mkcert &amp;&amp; cd mkcert</span><br><span class="line">//我采用的是编译的方式，所以还要安装golang</span><br><span class="line"># yum install golang</span><br><span class="line"># cd mkcert/</span><br><span class="line"># go build -ldflags &quot;-X main.Version=$(git describe --tags)&quot;</span><br></pre></td></tr></table></figure>
-<p>官方还提供了其它的安装方式，根据自己的环境选择，参与：<br><a target="_blank" rel="noopener" href="https://github.com/FiloSottile/mkcert">https://github.com/FiloSottile/mkcert</a></p>
-<h4 id="生成自签名证书"><a href="#生成自签名证书" class="headerlink" title="生成自签名证书"></a>生成自签名证书</h4><p>域名理论上随便输，不行就和nginx server_name相同就行了</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkcert o0x1055.com &quot;*.o0x1055.com&quot; localhost 127.0.0.1 ::1</span><br></pre></td></tr></table></figure>
-
-<p>执行此命令后会在当前目录生成两个文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">o0x1055.com+4-key.pem</span><br><span class="line">o0x1055.com+4.pem</span><br></pre></td></tr></table></figure>
-
-<p>把这两文件放到全适的位置，我放到了&#x2F;etc&#x2F;nginx&#x2F;ssl</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># mkdir -p /etc/nginx/ssl</span><br><span class="line">mv o0x1055.com* /etc/nginx/ssl</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="编辑nginx配置文件"><a href="#编辑nginx配置文件" class="headerlink" title="编辑nginx配置文件"></a>编辑nginx配置文件</h4><p>&#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;default.conf</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 443;</span><br><span class="line">    server_name o0x1055.com;</span><br><span class="line">    ssl on;</span><br><span class="line"></span><br><span class="line">    ssl_certificate /etc/nginx/ssl/o0x1055.com+4.pem;</span><br><span class="line">    ssl_certificate_key /etc/nginx/ssl/o0x1055.com+4-key.pem;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://127.0.0.1:8000; # bitwarden server address</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>重启nginx</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># systemctl restart nginx</span><br></pre></td></tr></table></figure>
-
-<p>此时访问443，就可以正常访问和注册了<br><img src="/images/blog/f132ea907ff86631acbf51290f16b209.png" alt="1"><br><img src="/images/blog/802178fa7e77d8e0f35791876d211ceb.png" alt="1"></p>
-<h3 id="0x6-端口映射"><a href="#0x6-端口映射" class="headerlink" title="0x6 端口映射"></a>0x6 端口映射</h3><p>使用端口映射工具（FRP等）把本地端口映射到公网，即可实现公网的访问了</p>
-<h3 id="0x7-certbot申请证书"><a href="#0x7-certbot申请证书" class="headerlink" title="0x7 certbot申请证书"></a>0x7 certbot申请证书</h3><p>添加在域名管理添加一条A记录，指定安装了certbot应用的服务器<br><img src="/images/blog/7432a8645b3ad79ee04fa934b4020c53.png"></p>
-<p>然后在指向的服务器执行生成证书</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certbot certonly --standalone  -d bit.elenlen.xyz</span><br></pre></td></tr></table></figure>
-
-<p>把其中的如下两个证书放到frp ssl目录下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./ssl/fullchain.pem</span><br><span class="line">./ssl/privkey.pem</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x7-frp设置"><a href="#0x7-frp设置" class="headerlink" title="0x7 frp设置"></a>0x7 frp设置</h3><p>frpc.ini配置</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line">server_addr = 42.193.253.66</span><br><span class="line">server_port = 7090</span><br><span class="line"></span><br><span class="line">[test_htts2http]</span><br><span class="line">type = https</span><br><span class="line">custom_domains = bit.elenlen.xyz</span><br><span class="line"></span><br><span class="line">plugin = https2http</span><br><span class="line">plugin_local_addr = 127.0.0.1:8000</span><br><span class="line"></span><br><span class="line">plugin_crt_path = ./ssl/fullchain.pem</span><br><span class="line">plugin_key_path = ./ssl/privkey.pem</span><br><span class="line">plugin_host_header_rewrite = 127.0.0.1</span><br><span class="line">plugin_header_X-From-Where = like</span><br></pre></td></tr></table></figure>
-
-<p>frps.ini配置</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line">bind_port = 7090</span><br><span class="line">vhost_https_port = 7099</span><br><span class="line">dashboard_port = 7500</span><br><span class="line"># dashboard&#x27;s username and password are both optional</span><br><span class="line">dashboard_user = admin</span><br><span class="line">dashboard_pwd = ******</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x8-docker命令"><a href="#0x8-docker命令" class="headerlink" title="0x8 docker命令"></a>0x8 docker命令</h3><p>在有docker-compose.yml目录下执行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-compose down //停止容器，删除网络信息等</span><br><span class="line">docker-compose up -d   //根据当前目录的docker-compose.yml文件，启动容器</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/bitwarden-frp-%E8%87%AA%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

